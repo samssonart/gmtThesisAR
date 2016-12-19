@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{natbib}
+\usepackage{graphicx}
+
+\title{Environment Lighting Simulation for Augmented Reality Realtime Applications}
+\author{Marco Antonio Salcedo Sanson }
+\date{December 2016}
+
+% Definition of \maketitle
+\makeatletter         
+\def\@maketitle{
+\noindent
+\includegraphics[scale = 0.5]{Figures/uu-logo.png}\\[8ex]
+\begin{center}
+{\Huge \bfseries \sffamily \@title }\\[4ex] 
+{\Large  \@author}\\[4ex] 
+\@date\\[8ex]
+\end{center}}
+\makeatother
+
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+The rendering of virtual objects on current AR applications has a number of shortcomings in the state of the art. It is quite easy to tell that it’s a superimposed virtual object. There are many factors that come into play and give away the lack of feasibility of an AR object, such as marker jiggle, inaccurate depth cues, lack of occlusion from real life objects and incompatible lighting.
+The method proposed in this work addresses the latter problem, the non-matching light conditions of the virtual and real world. The method is based on the idea that a 360 photograph of the environment can give us a lot of information about the environment and that they are now simple to create on an average mobile device. From this 360 photograph it can be determined if the environment is outdoors by day or any other case of illumination. If the environment is indoors a lightmap would be created using the photo, if outdoors the sun will be assumed as the main source of light, and its position would be calculated using the clock, calendar and compass of the mobile device running the application. 
+Whatever the case, the method's output is a set of lights whose properties are a position relative to the camera, a rotation and an intensity.
+
+\section{Related Work}
+Agusanto et al. proposed a similar method \cite{agusanto2003}. The main differences in the method they propose have to do mostly with the technologies used. Being already an old paper, their method was conceived for Augmented Reality on a computer, rather than on a smartphone. My choice of a smartphone comes with the downside of lower processing power, but with the great advantage of the different sensors available on the device. The method in the Agusanto paper created the lightmaps using hand-crafted HDR photographs of the real scene using highly reflective metal spheres in contrast with my proposition of using the 360 degree photograph on the device itself.
+Pessoa\cite{pessoa2011} expanded on Agusanto's work and created the Real-Time Photorealistic Rendering of Synthetic Objects into Real Scenes (RPR-SORS) toolkit as an extension of the ARToolkit Augmented reality SDK. Although they use more modern techniques, such as cubemaps instead of HDR photographs, their approach still has the same differences than the Agusanto method.
+There have been several methods to insert virtual objects into static photographs automatically with highly realistic results. One such example is the method by Karsh \cite{karsh2014} in their Depth transfer: Depth extraction from video using non-parametric sampling. IEEE Transactions on Pattern Analysis and Machine Intelligence paper. These kind of methods are not suitable for real- time applications.
+A general different with all the methods reviewed is that none are thought on the context of mobile devices, they are all for AR on a computer. Also none of these methods have attempted to predict the global illumination conditions using the sun position that can be inferred from the device's sensors.
+
+\section{Method}
+Here goes the theoretical part
+
+\section{Implementation}
+Here goes the implementation and technical details.
+
+\section{Conclusion}
+results seem promising but more research is necessary
+
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}
