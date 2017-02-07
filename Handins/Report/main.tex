@@ -3,9 +3,9 @@
 \usepackage{natbib}
 \usepackage{graphicx}
 
-\title{Environment Lighting Simulation for Augmented Reality Realtime Applications}
+\title{Realtime Environment Lighting Simulation for Augmented Reality  Applications}
 \author{Marco Antonio Salcedo Sanson }
-\date{December 2016}
+\date{February 2017}
 
 % Definition of \maketitle
 \makeatletter         
@@ -13,7 +13,7 @@
 \noindent
 \includegraphics[scale = 0.5]{Figures/uu-logo.png}\\[8ex]
 \begin{center}
-{\Huge \bfseries \sffamily \@title }\\[4ex] 
+{\huge \bfseries \sffamily \@title }\\[4ex] 
 {\Large  \@author}\\[4ex] 
 \@date\\[8ex]
 \end{center}}
@@ -34,23 +34,34 @@ The contributions of this method are an image-based method with which the lighti
 Agusanto et al. proposed a similar method \cite{agusanto2003}. The main differences in the method they propose have to do mostly with the technologies used. Being already an old paper, their method was conceived for Augmented Reality on a computer, rather than on a smartphone. My choice of a smartphone comes with the downside of lower processing power, but with the great advantage of the different sensors available on the device. The method in the Agusanto paper infers the lighting conditions using hand-crafted HDR photographs of the real scene using highly reflective metal spheres in contrast with my proposition of using the 360 degree photograph on the device itself, which is a lot more accessible to an average consumer.
 Pessoa\cite{pessoa2011} expanded on Agusanto's work and created the Real-Time Photorealistic Rendering of Synthetic Objects into Real Scenes (RPR-SORS) toolkit as an extension of the ARToolkit Augmented reality SDK. Although they use more modern techniques, such as cubemaps instead of HDR photographs, their approach still has the same differences than the Agusanto method.
 There have been several methods to insert virtual objects into static photographs automatically with highly realistic results. One such example is the method by Karsh \cite{karsh2014} These kind of methods are not suitable for real- time applications, and they use a single view image to infer the lighting conditions. The method proposed here is more robust in the sense that it uses a 360 view of the environment to eliminate assumptions of what there is out of frame.
-Xing\cite{xing2013} also devised a method to compose virtual objects into static photographs, focusing on outdoors scenes. The method is quite sophisticated, but a lot of the information fed to the light calculation functions involve manual input by the user. The proposed method is intended to work both for indoors and outdoors scenes, the main difference with the way outdoors scenes will be managed is that the method works automatically, without user intervention. This is accomplished by the usage of the mobile device's dedicated geolocation hardware. By using it, there is no need to assume anything or ask for any user input, the device will be able to tell a good approximation of the sun position using only the sensor's infrmation.
+Xing\cite{xing2013} also devised a method to compose virtual objects into static photographs, focusing on outdoors scenes. The method is quite sophisticated, but a lot of the information fed to the light calculation functions involve manual input by the user. The proposed method is intended to work both for indoors and outdoors scenes, the main difference with the way outdoors scenes will be managed is that the method works automatically, without user intervention. This is accomplished by the usage of the mobile device's dedicated geolocation hardware. By using it, there is no need to assume anything or ask for any user input, the device will be able to tell a good approximation of the sun position using only the sensor's information.
+\section{Theoretical Framework}
+In this section a few technical concepts will be explored in order to make the proposed method and what it aims to accomplish more clear.
+
+\textbf{Augmented Reality}\newline
+As of yet, the definition of Augmented Reality that is most widely accepted is the one presented by Azuma\cite{azuma1997}. In this survey Augmented Reality (or AR for short) is defined as a software system that features a blend of real and virtual objects, the user can interact with it in real time and presents a 2D representation of a 3D world for both the real and virtual sides. A feature film that integrates real and virtual characters or objects is therefore strictly speaking not AR for example, because it's static content, the consumer cannot interact with it at all, let alone in real time.
+In order to combine real and virtual objects both worlds must be aligned, in the sense that they must share a common origin for both position and rotation. If the virtual objects present in the real scene are not aligned the feasibility of the whole composition is compromised. The tracking of real world features as a guideline for alignment in the virtual world is one of the challenges in the field of AR. There are many techniques that have been used, such as sensor-based tracking, that uses dedicated hardware to feed the software application the position and rotation information it needs; vision-based tracking, in which the position and orientation origin of the virtual world are determined by images recognized by a computer vision algorithm. These images are named fiducial markers and can be an artificial black and white image, a "natural" images (points, lines, shapes and/or textures) or even 3D objects. Other approaches involving both sensors and vision algorithms have also been used, if the reader is interested in learning more about tracking, Zhou's survey\cite{zhou2008} on tracking is a good resource.
+
+\textbf{Sensors}\newline
+Most smartphones and tablets in the market nowadays have built-in sensors to measure many things that are helpful for application developers, such as motion, orientation and other environmental conditions. The ones that are relevant for this method are the following:\newline
+Accelerometer: This device measures proper acceleration relative to gravity. Its application in mobile development is to measure motion changes and to measure the device orientation relative to Earth's surface. It usually consists of 3 orthogonal axes. \newline
+Gyroscope: A sensor that is capable of measuring the rate of rotation around a particular axis. It serves the same purpose as the accelerometer, but mobile devices usually have both for more robust measurements. \newline
+Photometer: There is a wide variability in terms of capacity of photometers across different devices, but the only measurement that is guaranteed is the ambient illuminance. \newline 
+Magnetometer: In terms of mobile devices it serves the purpose of a compass, it measures the device's orientation with respect to the Earth's magnetic poles. In mobile development it is useful to get the heading of the device.\newline
+GPS: Measures the raw position of the device in three-dimmensional Cartesian coordinates with origin on the center of the Earth. It can be used to determined where on planet Earth the device is located (Country, city, neigborhood, etc). It needs to have line of sight with no electromagnetic interference with at least 4 out of the 24 satellites in orbit that are used for GPS. \newline
 \section{Method}
 This section covers the steps needed to produce the wanted results. The input needed is a marker M to provide the object position in the real world; and a 3D mesh O which will be rendered in Augmented Reality. The output is a set of light sources L\textsubscript{i}, each one having a position, orientation and intensity. In order to complete the luminance (luma) analysis a 360 panoramic image is required, but it will be generated as a previous step, it is not necessary to have one beforehand.
 
-1.- Capture a 360 panoramic image of the environment using the device. Desaturate it and lower the color space.
+1.- Capture a 360 panoramic image of the environment using the device. In order to perform a luminance analisys it's necessary to lose the color information, this is done by desaturating the image. After that the contrast of the image is adjusted to preserve only the areas of high luminance.
 
-2.- Scan for zones of high luminance. This is defined as a group of white pixels within a imageWidth/100 by imageHeight/100 area.
+2.- Scan for zones of high luminance. This is done by a computer vision blob detection algorithm, since after the image preparation stages the areas of high luminance are just that.
 
-2b.- High luminance zone found: scan for a falloff around the white pixel group. If found, light source found, will be processed to determine position and orientation. If no falloff, just a clear-colored object.
+2b.- High luminance zone found: Analyze the contour of the object, if it's solid it's a false positive, probably a clear object in the visual range. If it's diffuse and/or jagged a light source was found. 
+2c.- If there is a continuous high luminance area encompassing most of the image's upper section, environment is outdoors, only sunlight emulation will be used. Even if there are significant occlusions causing discontinuity in the high luminance area it can be classified as an outdoors scene if the height of the light sources is at least 30\% of the image height for all instances.
 
-2c.- If there is a majorly continuous white pixel group encompassing most of the image's upper section, environment is outdoors, only sunlight emulation will be used.
+2c.- No high luminance area found: light source is not visible in the picture, will be approximated with further analysis. This is based around the intuition that it's not possible that there is not a light source, unless the image was pitch black.
 
-2c.- No high luminance zone found: light source is not visible in the picture, will be approximated analyzing further. This is based around the intuition that it's not possible that there is not a light source, unless the image was pitch black.
-
-3.- Light position and orientation calculation: the input 360 image is mapped on a unit sphere, the preliminary known light sources' positions will be obtained in spherical coordinates in this step. They are then converted to Cartesian coordinates and the distance from the camera will be adjusted once the orientation is known, according to the whiteness of the objects affected by the light. If the light source is not present in frame it will be assumed to be on North Pole of the sphere, because the only positions that a 360 degree photograph would miss are directly above or directly below the camera, and a light source located directly below the camera would be highly unlikely in normal situations.
-
-Orientation: For point lights orientation is irrelevant. For area lights and spotlights the processed input image will be analyzed for white edges.
+3.- Light position and orientation calculation: the input 360 image is mapped on a unit cylinder, the preliminary known light sources' positions will be obtained in cylindrical coordinates in this step. They are then converted to Cartesian coordinates and the distance from the camera will be adjusted once the orientation is known. If the light source is not present in frame it will be assumed to be directly above the camera, because the only positions that a 360 degree photograph would miss are directly above or directly below the camera, and a light source located directly below the camera would be highly unlikely in normal situations.
 
 
 \section{Implementation}
