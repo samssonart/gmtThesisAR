@@ -64,13 +64,10 @@ This section covers the steps needed to produce the wanted results. The input ne
 \]
  Where p\textsubscript{i} is the ith pixel. Such that 
 \[
-    L_v(p_i) > 220  p_0 \delta p_1 ... \delta p_n  
+    L(p_i) > 0.2 \times max_i(L(p_i)) 
 \]
-and
-\[
-    p_0 \delta p_1 ... \delta p_n  
-\]
-Where $\delta$ is the proximity relation, meaning that they are neigboring pixels.\newline
+
+%Where $\delta$ is the proximity relation, meaning that they are neigboring pixels.\newline
 2b.- High luminance zone found: Analyze the contour of the object, if it's solid it's a false positive, probably a clear object in the visual range. If it's diffuse and/or jagged a light source was found. 
 2c.- If there is a continuous high luminance region encompassing most of the image's upper section, environment is outdoors, only sunlight emulation will be used. Even if there are significant occlusions causing discontinuity in the high luminance region it can be classified as an outdoors scene if the height of the light sources is at least 30\% of the image height for all instances.
 

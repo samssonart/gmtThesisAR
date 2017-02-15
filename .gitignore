@@ -38,3 +38,8 @@ captures/
 
 # Keystore files
 *.jks
+Handins/Report/main.aux
+Handins/Report/main.bbl
+Handins/Report/main.blg
+Handins/Report/main.pdf
+Handins/Report/main.synctex.gz
