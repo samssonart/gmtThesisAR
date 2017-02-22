@@ -2,6 +2,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage{natbib}
 \usepackage{graphicx}
+\usepackage{float}
+\usepackage{url}
+\usepackage{commath}
 
 \title{Realtime Environment Lighting Simulation for Augmented Reality  Applications}
 \author{Marco Antonio Salcedo Sanson }
@@ -29,8 +32,13 @@ The rendering of virtual objects on current AR applications has a number of shor
 The method proposed in this work addresses the latter problem, the non-matching light conditions of the virtual and real world. The method is based on the idea that a 360 photograph of the environment can give us a lot of information about the lighting conditions and that such 360 photographs are now simple to create on an average mobile device. From this 360 photograph it can be determined if the environment is outdoors by day or any other case of illumination. If the environment is indoors the light sources of the room will be approximated using the photo, if outdoors the sun will be assumed as the main source of light, and its position would be calculated using the clock, calendar and compass of the mobile device running the application. \newline
 Whatever the case, the method's output is a set of lights whose properties are a position relative to the camera, a rotation and an intensity.
 It's important to stress the fact that the method is proposed for mobile devices. There have been previous works, as detailed in the next section, that deal with the same problem but on computers. Mobile devices present advantages over computers for this task, but also the downside of generally lower processing power compared to computers. This decision comes from the ease of producing the 360 photographs locally, from the judgement that AR is better suited for mobile devices than computers (for mobility and ease of use reasons) and also to be able to exploit the devices geolocation hardware. Of course this doesn't mean that the method will only be applicable to mobile, there are also ways to adapt it to work on computers too.\newline
-The research question from which this method was originally envisioned is: "Can the accurateness of lightning in AR applications be improved using a mobile device to it's full potential?". What this means is that thanks to the many ways a smartphone or tablet can interact with the user and the environment we can know a lot about the surroundings. And this information could potentially be very useful to save computation time, which is the main downside to using mobile devices, their relatively lower computational capabilities.\newline
-The contributions of this method are an image-based method with which the lighting conditions of the full visible environment can be modeled and the use of the mobile device's geolocation hardware to enhance the light simulation with the knowledge of the current weather conditions and the position of the sun, which also can be used to fall back in case of extremely complex lighting conditions.
+The research question from which this method was originally envisioned is: "Can the accuracy of lighting in AR applications be improved using a mobile device to it's full potential?". What this means is that thanks to the many ways a smartphone or tablet can interact with the user and the environment we can know a lot about the surroundings. And this information could potentially be very useful to save computation time, which is the main downside to using mobile devices, their relatively lower computational capabilities.\newline
+The contributions of this method are:
+\begin{itemize}
+    \item An image-based method with which the lighting conditions of the full visible environment can be modeled
+    \item The use of the mobile device's geolocation hardware to enhance the light simulation with the knowledge of the current weather conditions and the position of the sun
+\end{itemize}
+
 
 \section{Related Work}
 Agusanto et al. proposed a similar method \cite{agusanto2003}. The main differences in the method they propose have to do mostly with the technologies used. Being already an old paper, their method was conceived for Augmented Reality on a computer, rather than on a smartphone. My choice of a smartphone comes with the downside of lower processing power, but with the great advantage of the different sensors available on the device. The method in the Agusanto paper infers the lighting conditions using hand-crafted HDR photographs of the real scene using highly reflective metal spheres in contrast with my proposition of using the 360 degree photograph on the device itself, which is a lot more accessible to an average consumer.\newline
@@ -53,45 +61,82 @@ Most smartphones and tablets in the market nowadays have built-in sensors to mea
 \textbf{Photometer}: There is a wide variability in terms of capacity of photometers across different devices, but the only measurement that is guaranteed is the ambient illuminance expressed in lx.  In the method it will be useful for detection of a noticeable change in ambient lighting, leading to a re-capture of the panorama. What exactly constitutes a noticeable change in ambient lighting will be determined through parameter tuning. \newline 
 \textbf{Magnetometer}: In terms of mobile devices it serves the purpose of a compass, it measures the device's orientation with respect to the Earth's magnetic poles. In mobile development it is useful to get the heading of the device expressed in degrees.\newline
 \textbf{GPS}: Measures the raw position of the device in three-dimensional Cartesian coordinates with origin on the center of the Earth. It can be used to determined where on planet Earth the device is located (Country, city, neighborhood, etc). It needs to have line of sight with no electromagnetic interference with at least 4 out of the 24 satellites in orbit that are used for GPS. \newline
+
 \section{Method}
-This section covers the steps needed to produce the wanted results. The input needed is a marker M to provide the object position in the real world; and a 3D mesh O which will be rendered in Augmented Reality. The output is a set of light sources L\textsubscript{i}, each one having a position, orientation and intensity. In order to complete the luminance (luma) analysis a 360 panoramic image is required, but it will be generated as a previous step, it is not necessary to have one beforehand.
+This section covers the steps needed to produce the wanted results. The input needed is a fiducial marker M to provide the object position in the real world; and a 3D mesh O which will be rendered in Augmented Reality. The output is a set of light sources L\textsubscript{i}, each one having a position, orientation, intensity, color and size. In order to complete the luminance (luma) analysis a 360 panoramic image is required, but it will be generated as a previous step, it is not necessary to have one beforehand. The entirety of the process is layed out in the flowchart in Figure 1, and each step is described in more detail afterwards.
 
-1.- Capture a 360 panoramic image of the environment using the device. In order to perform a luminance analysis it's necessary to lose the color information, this is done by desaturating the image. After that the contrast of the image is adjusted to preserve only the regions of high luminance.
+\begin{figure}[H]
+  \centering
+  \setlength{\unitlength}{\textwidth} 
+    \begin{picture}(1,0.5)
+       \put(-0.1,0){\includegraphics[width=1.3\unitlength]{Figures/Flowchart.png}}
+       
+    \end{picture}
+    \caption{The method in a nutshell}
+\end{figure}
 
-2.- Scan for zones of high luminance. This is done by a computer vision blob detection algorithm, since after the image preparation stages the regions of high luminance are just that. A region of high luminance is defined as follows:
+\subsection{Panoramic image capture}
+In this work panoramic images are used as a tool, therefore it's not within the scope of the method to define a new way of capturing 360 images. The implementation will be based on the one by Chuang et al. \cite{ThreeSixty}
+In order to simplify the calculation of light parameters later on, a modification to their implementation will be done forcing the user to face north when beginning to take the panoramic capture.
+
+\subsection{Image processing}
+Once the panoramic image exist the first step in order to be able to analyze the luminance is to get rid of the chrominance information. This is achieved by desaturating the image. The contrast ratio has to be adjusted, so that the regions with high luminance are more clearly differentiable. The result of these steps is a black and white image with the rough shape of the light source. If the image ends up completely black it means there are no important visible light sources and ambient illumination alone would give a good enough result on the rendered model. A region of high luminance is defined as follows:
 \[
-    R(hL) = \{p_0, p_1, ... , p_n\}
+    R(H) = \{p_{00}, p_{01}, ... , p_{mn}\}
 \]
- Where p\textsubscript{i} is the ith pixel. Such that 
+ Where p\textsubscript{ij} is the pixel in the i,j position of the image. Such that 
 \[
-    L(p_i) > 0.2 \times max_i(L(p_i)) 
+    L(p_{ij}) > 0.9 \times max(L(p_{ij})) 
 \]
+However if there are regions of high luminance they would be discovered with a fair amount of noise and artifacts, caused by clear objects, reflections of light sources on highly reflective surfaces, or even light sources that are so far away in the distance that don't really contribute an important amount of light to the area of interest. Therefore it's necessary to also add a relative size constraint to the definition. What constitutes an acceptable region size to deem the light source is not an easy question to answer. The best approach to face this problem is to define it as a percentage of the width and height of the overall image and tune the parameter in search for the best solution. The size constraint would therefore be:
 
-%Where $\delta$ is the proximity relation, meaning that they are neigboring pixels.\newline
-2b.- High luminance zone found: Analyze the contour of the object, if it's solid it's a false positive, probably a clear object in the visual range. If it's diffuse and/or jagged a light source was found. 
-2c.- If there is a continuous high luminance region encompassing most of the image's upper section, environment is outdoors, only sunlight emulation will be used. Even if there are significant occlusions causing discontinuity in the high luminance region it can be classified as an outdoors scene if the height of the light sources is at least 30\% of the image height for all instances.
+\[
+    width(R(H)) \times height(R(H)) \geq k \times W \times H
+\]
+Where k is the parameter to be tuned; W and H are the total image width and height.\newline
 
-2c.- No high luminance region found: light source is not visible in the picture, will be approximated with further analysis. This is based around the intuition that it's not possible that there is not a light source, unless the image was pitch black.
+These constraints also help keep the amount of lights to be processed within an acceptable range for a real-time application, even if the real environment has many light sources a simplification of them is necessary when modelling them to keep the application feasible. Once the relevant light sources have been identified their properties need to be calculated.
 
-3.- Light position and orientation calculation: the input 360 image is mapped on a unit cylinder, the preliminary known light sources' positions will be obtained in cylindrical coordinates in this step. They are then converted to Cartesian coordinates and the distance from the camera will be adjusted once the orientation is known. If the light source is not present in frame it will be assumed to be directly above the camera, because the only positions that a 360 degree photograph would miss are directly above or directly below the camera, and a light source located directly below the camera would be highly unlikely in normal situations.
+\subsection{Calculate light properties}
+The properties needed to calculate for each light are position, orientation, intensity, size and color. In the real world there is no way to calculate the position and size at the same time, because at least one of them would have to be known. Fortunately in the virtual world this is not necessary, as long as it is consistent, for the area size of the light the pixel measures can be used. With this in mind all the other properties can be calculated.
 
+\begin{enumerate}
+\item Width and height: The pixel measures will be used for this, they can me determined from the size constraint in the previous step.
+\item Position: It is posible to calculate the distance from and object to a camera lens knowing a few parameters from the lens, namely the focal lenght and the sensor size. In Android these values are easily obtainable through the ExifInterface class. In iOS the values are publicly known per device family, so it's possible to create a lookup table with the values and have the application ask what device it's running on to match the necessary set of values. The calculation is then done as follows:
+\[
+    d(L_i) = \frac{ f \times h_i}{sensorHeight}
+\]
+\item  Orientation: Since the user was enforced to capture the environment starting from the north and the environment is the entire 360 degrees it is easy to map the pixel width to the angle of incidence of the light source. We can for example define the following ratio to calculate the angle:
+\[
+    \phi = \frac{pos(L_i)_x \times 180}{imageWidth \times 0.5}
+\]
+\item Color: Storing both versions of the panorama, one in full color and another one after processing will allow us to have both the color and the luminance information. Once a light source is detected, the equivalente area in the color image can be averaged to determine the color of the light source.
+\end{enumerate}
 
+\subsection{Calculate ambient light}
+Since the data from the device's sensors are available something more involved than having a default value of ambient illumination for the entire scene. Ambient illumination when no visible light sources are present is more often than not due to sunlight, be it in an outdoors scene or coming in from a window somewhere. There are ways \cite{solar} to calculate the sun position in spherical coordinates using the latitude, longitude, time of the day and day of the year of the observer. This information can be easily retrieved using the devices GPS, clock and calendar. The direction in which the sunlight is affecting the scene can be used in a per-vertex illumination shader to adjust the amount of ambient light in a specific vertex of the virtual object. This contribution can be done using lambertian diffuse contribution:
+\[
+    I_a = K_a \times (N \cdot L)
+\]
+Where $K_a$ is the maximum ambient contribution, N is the vertex normal and L is the light direction vector, normalized.
 \section{Expected results}
 In this section the measure of success and the scope of the method will be described. In terms of scope the aim of the method is to produce plausible lighting for Augmented Reality applications, and thus increase the sense of realism of the composed graphics. This does not mean that imagery that would for all practical purposes be indistinguishable from reality will be achieved. As said earlier, the non-matching lighting is only one of the problems with current AR graphics. In order to achieve complete realism all the other problems would have to be tackled as well, this includes occlusion from real objects as the most prominent one, but also the shadows of real objects not affecting the virtual ones at all. The method will also not attempt to improve other aspects of AR, such as tracking. The method comprises an offline and an online phase, offline being the acquisition of the 360 panorama and it's analysis for calculation; online is the actual rendering. It is also desirable and expected that the offline phase can be completed within a reasonable time frame on a mobile device, in terms of usability this should be no more than 1 minute.\newline
-Since the final product is a graphic on a screen, an image, it's somewhat difficult to define a measure of success, due to the inherent subjective nature of image appreciation. It can be said that the method successfully converged if in the final image the synthetic objects are hard to tell from the real ones, if formed on a line on a still image. Hard to tell meaning that some scrutiny and reflection is necessary when looking at a screen capture of the application. If an average technology consumer is able to immediately tell which of the objects are synthetic and which are real the method will then have failed. To explain the measure better in figure 1 we can see three objects, 2 real, 1 synthetic, from an AR included with the Vuforia library. Figure 2 shows the same array of objects, again the same 2 real and 1 synthetic, but in this case the synthetic object having been inserted with hand tuned lighting. It can be appreciated that it is harder to differentiate the virtual object in the second image than on the first one.
-\begin{figure}[h]
+Since the final product is a graphic on a screen, an image, it's somewhat difficult to define a measure of success, due to the inherent subjective nature of image appreciation. It can be said that the method successfully converged if in the final image the synthetic objects are hard to tell from the real ones, if formed on a line on a still image. Hard to tell meaning that some scrutiny and reflection is necessary when looking at a screen capture of the application. If an average technology consumer is able to immediately tell which of the objects are synthetic and which are real the method will then have failed. To explain the measure better in Figure 2 we can see three objects, 2 real, 1 synthetic, from an AR included with the Vuforia library. Figure 3 shows the same array of objects, again the same 2 real and 1 synthetic, but in this case the synthetic object having been inserted with hand tuned lighting. It can be appreciated that it is harder to differentiate the virtual object in the second image than on the first one.
+\begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{Figures/fake.jpg}
+\includegraphics[width=0.6\textwidth]{Figures/fake.jpg}
 \caption{Default lighting, making the virtual object stand out}
-\includegraphics[width=0.8\textwidth]{Figures/realish.jpg}
+\includegraphics[width=0.6\textwidth]{Figures/realish.jpg}
 \caption{Adjusted lighting, giving a more believable look}
 \end{figure}
 
 
 \clearpage
+
 \section{Conclusion}
-results seem promising but more research is necessary
+The above discussion has highlighted the potential benefits of using a mobile device's hardware in a smart way to obtain information about the environment and be able to produce a more convincing lighting estimation than what's currently available in AR applications. Unlike previous works reviewed, this method is conceived for mobile devices and real-time applications, while also being as user-friendly as possible, in the sense of keeping user interaction to a bear minimum and obtaining information that's already available through the hardware. 
 
 \bibliographystyle{plain}
+\nocite{*}
 \bibliography{references}
 \end{document}
