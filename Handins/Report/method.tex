@@ -12,11 +12,11 @@ This section covers the steps needed to produce the wanted results. The input ne
     \caption{The method in a nutshell}
 \end{figure}
 
-\subsection{Capture 360 panoramic image}
+\section{Capture 360 panoramic image}
 In this work panoramic images are used as a tool, therefore it's not within the scope of the method to define a new way of capturing 360 images. The implementation will be based on the one by Chuang et al. \cite{ThreeSixty}
 $M$ will provide the origin of the virtual world for placing and orienting $O$ within it. In order for the lights to be mapped to the same position as $M$ the user will be asked to place the marker in the desired position and start capturing the environment while the marker is centered in frame. This will also simplify calculations of light orientations later on.
 
-\subsection{Image processing}
+\section{Image processing}
 Once the panoramic image exist the first step in order to be able to analyze the luminance is to get rid of the chromatic information. This is achieved with the following equation:
 
 \begin{equation}
@@ -60,7 +60,7 @@ Where $k$ is the parameter to be tuned; $W$ and $H$ are the total image width an
 
 These constraints also help keep the amount of lights to be processed within an acceptable range for a real-time application, even if the real environment has many light sources a simplification of them is necessary when modelling them to keep the application feasible. Once the relevant light sources have been identified their properties need to be calculated.
 
-\subsection{Calculate light properties}
+\section{Calculate light properties}
 The properties needed to calculate for each light are position, orientation, intensity, size and color. In the real world it is not trivial to calculate the position and size at the same time, because at least one of them would have to be known. Fortunately in the virtual world this is not necessary, as long as it is consistent, for the area size of the light the pixel measures can be used. With this in mind all the other properties can be calculated.
 
 \begin{enumerate}
@@ -83,13 +83,15 @@ The properties needed to calculate for each light are position, orientation, int
 Determining if the light is a spotlight or an area light will be done through the shape. Elliptical lights will be tagged spotlights and quadrilateral lights area light. Shape detection will be carried out using OpenCV contour detection and counting the vertices of the contour. Even if in the real world the light is a perfect square and the camera is facing it with no parallax it is expected that,  due to artifacts and noise, the function may not find exactly 4 vertices. This is not a big problem, because the number of vertices needed to create smooth circle range in the dozens. So adjusting a threshold value is a simple and acceptable solution.
 \end{enumerate}
 
-\subsection{Calculate ambient light}
-Since a panoramic image of the environment is already available using it to implement Environment Mapping would be an adequate use of resources. In order to generate an Environment Map it is necessary that the panorama is made into a High Dyamic Range image. This is because the Low Dynamic Range image captured directly from the device camera fails to capture the information necessary to simulate correct color balance, shadows, and highlights of the lighting environment; ultimately producing both inaccurate and less visually pleasing results. This has been illustrated by Paul Debevec.\cite{DebevecRSO}\newline 
+\section{Calculate ambient light}
+Environment mapping is an image-based technique to approximate the appearance of the overall light conditions of an environment. This is accomplished by means of a precomputed texture image mapped as a far-away environment surrounding. Said surrounding is usually a geometric surface, when Blinn first introduced the method\cite{Blinn76} a sphere was used. Nowadays there are other alternatives, such as cube, paraboloid, pyramid or cylinder maps. The principle for each surface is the same, but the way to map a planar image onto the surface varies per surface.\newline
+Since a panoramic image of the environment is already available using it to implement environment mapping would be an adequate use of resources. In order to generate an environment map it is necessary that the panorama is made into a High Dyamic Range image. This is because the Low Dynamic Range image captured directly from the device camera fails to capture the information necessary to simulate correct color balance, shadows, and highlights of the lighting environment; ultimately producing both inaccurate and less visually pleasing results. This has been illustrated by Paul Debevec.\cite{DebevecRSO}\newline 
 A relatively easy and effective way to make an image into an HDR version is a technique called Tone Mapping, in which versions with different exposure values of the same image are blended together to include the full range of highlights and shadows of the overexposed and underexposed versions in a single image. Since asking the user to capture the environment more than once would have a bad impact on user friendliness, and also it's highly unlikely that the produced image would have the exact same framing every time, the different exposure values for the Tone Mapping will be produced altering the brightness and contrast values of the base image using equation 2 once again. After that the HDR image is produced using Debevec's weighting algorithm\cite{Debevec}.\newline
+It's important to disclaim that the Tone Mapping process will not yield an actual HDR image. In the first place, it will be a standard 24 bit image in the $0...255$ range, with highlight and shodow valued clipped. The upside to still going through this process nonetheless is that the environment will be described in a richer way, capturing the bright areas and the shodows better than the standard exposure image.\newline
 After the HDR version of the panorama is created it can be used to have an actual ground truth about the environment light color and intensity at any given point in the virtual space. This will be detailed in the Real-time Phase step subsection.
 
-\subsection{Real-time Phase}
-Everything may be accurate and could theoretically yield more convincing AR rendering, but unless it's actually implemented and proven it's all for naught. That is the motivation for implementing a tailor made AR application where all actors come into play to prove or disprove the accuracy and feasibility of the composited virtual objects in the camera feed.\newline
+\section{Real-time Phase}
+Everything proposed in the method may be accurate and could theoretically yield more convincing AR rendering, but it has to be tested in order to determine for sure if that is the case. That is the motivation for implementing a tailor made AR application where all actors come into play to prove or disprove the accuracy and feasibility of the composited virtual objects in the camera feed.\newline
 The system is intended to work with ARToolkit, which already has implemented an OpenGL ES 2.0 and an OpenSceneGraph context. OpenGL ES 2.0 allows for great flexibility for lighting, due to the fact that it doesn't have a fixed functionality way to make lighting, a custom made shader has to be made. All the fixed functionality variables from OpenGL, such as the gl\_LightSource array are gone, left for every developer to implement the shader inputs and outputs however they see fit. So there won't be any concerns about getting the light parameters that OpenGL understands, the shader will just read an array of data and as long as the logic is well implemented everything will just work.\newline
 The virtual side of the application will have the set of lights, the model $O$ to display and the HDR environment mapped into a cylinder. For the object, a matte diffuse shader, a shiny plastic-like shader and a reflective metal-like shader will be implemented. For performance concerns a refractive glass-like shader or Fresnel effect will not be present. The cylinder with the environment will not be rendered as such, but it will be used to calculate the environment lighting and reflections on the shaders that have reflectivity, to emulate the effect of a raytracer within the OpenGL rasterizer. This effect is achieved with a per-vertex lighting shader.  The reflected color is calculated with the normal vector at a vertex of the surface, and the view vector. The reflection is calculated like so:
 \begin{equation}
