@@ -4,17 +4,9 @@
 
 extern "C"
 {
-    JNIEXPORT jstring JNICALL
-    Java_com_illuminati_samssonart_illuminati_MainActivity_stringFromJNI(JNIEnv *env,
-                                                                         jobject /* this */) {
-
-        std::string hello = "Hello from C++";
-        return env->NewStringUTF(hello.c_str());
-
-    }
 
     JNIEXPORT jstring JNICALL
-    Java_com_illuminati_samssonart_illuminati_MainActivity_sliderChanged(JNIEnv * env , jobject /* this */, jfloat f )
+    Java_com_illuminati_samssonart_illuminati_NativeRenderer_sliderChanged(JNIEnv * env , jobject /* this */, jfloat f )
     {
 
         float fs = f;

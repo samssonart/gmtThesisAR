@@ -3,7 +3,6 @@ package com.illuminati.samssonart.illuminati;
 import org.artoolkit.ar.base.ARActivity;
 import org.artoolkit.ar.base.rendering.ARRenderer;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -11,17 +10,8 @@ import android.widget.FrameLayout;
 
 public class MainActivity extends ARActivity {
 
-    // Used to load the 'native-lib' library on application startup.
-    static {
-        System.loadLibrary("native-lib");
-    }
 
     private NativeRenderer nativeRenderer = new NativeRenderer();
-
-    public native String stringFromJNI();
-    public native String sliderChanged(float f);
-    //public JavaCameraView javaCameraView;
-
     private SeekBar zAxisBar;
     private TextView tv;
 
@@ -49,7 +39,7 @@ public class MainActivity extends ARActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
 
-                tv.setText(sliderChanged(progress/255.0f));
+                tv.setText(nativeRenderer.sliderChanged(progress/255.0f));
 
             }
 
