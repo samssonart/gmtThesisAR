@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2632A0401EA514EE00C1AF1C /* Lights.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2632A03F1EA514EE00C1AF1C /* Lights.plist */; };
 		2641529A1EA37ACD001D2BF7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 264152991EA37ACD001D2BF7 /* main.m */; };
 		2641529D1EA37ACD001D2BF7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2641529C1EA37ACD001D2BF7 /* AppDelegate.m */; };
 		264152A01EA37ACD001D2BF7 /* ARViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2641529F1EA37ACD001D2BF7 /* ARViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -48,6 +49,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2632A03F1EA514EE00C1AF1C /* Lights.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Lights.plist; path = Illuminati/Data2/Lights.plist; sourceTree = "<group>"; };
 		264152951EA37ACD001D2BF7 /* Illuminati.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Illuminati.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		264152991EA37ACD001D2BF7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2641529B1EA37ACD001D2BF7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -1638,6 +1640,7 @@
 		2641528C1EA37ACD001D2BF7 = {
 			isa = PBXGroup;
 			children = (
+				2632A03F1EA514EE00C1AF1C /* Lights.plist */,
 				264159351EA37C7A001D2BF7 /* Illuminati_Prefix.pch */,
 				264152971EA37ACD001D2BF7 /* Illuminati */,
 				264152961EA37ACD001D2BF7 /* Products */,
@@ -4142,6 +4145,7 @@
 				264159961EA37F83001D2BF7 /* Data2 in Resources */,
 				264152A81EA37ACD001D2BF7 /* LaunchScreen.storyboard in Resources */,
 				264152A51EA37ACD001D2BF7 /* Assets.xcassets in Resources */,
+				2632A0401EA514EE00C1AF1C /* Lights.plist in Resources */,
 				264152A31EA37ACD001D2BF7 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4354,6 +4358,7 @@
 				264152AE1EA37ACD001D2BF7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

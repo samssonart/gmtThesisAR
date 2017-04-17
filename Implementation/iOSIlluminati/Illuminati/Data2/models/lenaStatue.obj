@@ -9,7 +9,7 @@
 # Faces: 36532
 #
 ####
-mtllib ./lenaStatue.obj.mtl
+mtllib ./lenaStatue.mtl
 
 vn -5.102622 -1.420346 -2.423459
 v 0.631687 49.312820 1.591252 0.752941 0.752941 0.752941

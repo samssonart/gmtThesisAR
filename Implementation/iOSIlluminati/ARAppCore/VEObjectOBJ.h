@@ -52,4 +52,5 @@
 @interface VEObjectOBJ : VEObject {
 }
 
+
 @end

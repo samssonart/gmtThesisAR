@@ -65,9 +65,32 @@
     GLMmodel *glmModel;
 }
 
+NSDictionary * LightDictionary;
+NSMutableArray * lightValues;
+
 + (void)load
 {
+    lightValues = [[NSMutableArray alloc] init];
+    NSArray * lightComponents;
     VEObjectRegistryRegister(self, @"obj");
+    LightDictionary = [NSDictionary dictionaryWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"Data2/Lights" ofType:@"plist"]];
+    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:[[NSBundle mainBundle] pathForResource:@"Data2/Lights" ofType:@"plist"]];
+    if(!fileExists){ NSLog(@"Error loading lights file");}
+    else
+    {
+        for (id key in LightDictionary)
+        {
+            NSLog(@"key: %@, value: %@ \n", key, [LightDictionary objectForKey:key]);
+            lightComponents = [[LightDictionary objectForKey:key] componentsSeparatedByString:@","];
+            if([lightComponents count]>1 && lightComponents != nil)
+            {
+                [lightValues addObject:lightComponents];
+                NSLog(@"Value added");
+            }
+            lightComponents = nil;
+        }
+    }
+    
 }
 
 - (id) initFromFile:(NSString *)file translation:(const ARdouble [3])translation rotation:(const ARdouble [4])rotation scale:(const ARdouble [3])scale config:(char *)config
@@ -126,7 +149,19 @@
     // Ultimately, this should be cached via the app-wide OpenGL state cache.
     const GLfloat lightWhite100[]        =    {1.00, 1.00, 1.00, 1.0};    // RGBA all on full.
     const GLfloat lightWhite75[]        =    {0.75, 0.75, 0.75, 1.0};    // RGBA all on three quarters.
-    const GLfloat lightPosition0[]     =    {1.0f, 1.0f, 2.0f, 0.0f}; // A directional light (i.e. non-positional).
+    
+    const GLfloat lightPosition0[]     =    {[[[lightValues objectAtIndex:0] objectAtIndex:0] floatValue],
+        [[[lightValues objectAtIndex:0] objectAtIndex:1] floatValue],
+        [[[lightValues objectAtIndex:0] objectAtIndex:2] floatValue],
+        [[[lightValues objectAtIndex:0] objectAtIndex:3] floatValue]}; // A directional light (i.e. non positional).
+    
+    const GLfloat lightPosition1[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
+    const GLfloat lightPosition2[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
+    const GLfloat lightPosition3[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
+    const GLfloat lightPosition4[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
+    const GLfloat lightPosition5[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
+    const GLfloat lightPosition6[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
+    const GLfloat lightPosition7[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
     
     if (_visible) {
         glPushMatrix();
