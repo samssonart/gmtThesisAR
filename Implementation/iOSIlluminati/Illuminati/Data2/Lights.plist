@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>LIGHT0</key>
-	<string>1.0, 1.0, 2.0, 0.0</string>
+	<string>0.0, 2.0, 0.0, 0.0</string>
 	<key>LIGHT1</key>
 	<string>1.0, 1.0, 2.0, 0.0</string>
 	<key>LIGHT2</key>

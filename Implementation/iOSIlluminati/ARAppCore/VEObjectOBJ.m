@@ -57,6 +57,7 @@
 #import <sys/param.h> // MAXPATHLEN
 #import <Eden/EdenMath.h>
 #import <Eden/glm.h>
+#import <CoreGraphics/CoreGraphics.h>
 
 #import "ARView.h"
 #import "ARViewController.h"
@@ -67,11 +68,17 @@
 
 NSDictionary * LightDictionary;
 NSMutableArray * lightValues;
+UIImage* envMap;
+uint m_envMap;
 
 + (void)load
 {
+    NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
     lightValues = [[NSMutableArray alloc] init];
     NSArray * lightComponents;
+    envMap = [UIImage imageWithContentsOfFile:[bundlePath stringByAppendingPathComponent:@"Data2/environment.jpg"]];
+    if(envMap != nil) NSLog(@"Environment map succesfully loaded");
+    m_envMap = CreateTextureData(envMap);
     VEObjectRegistryRegister(self, @"obj");
     LightDictionary = [NSDictionary dictionaryWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"Data2/Lights" ofType:@"plist"]];
     BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:[[NSBundle mainBundle] pathForResource:@"Data2/Lights" ofType:@"plist"]];
@@ -92,6 +99,52 @@ NSMutableArray * lightValues;
     }
     
 }
+
+uint CreateTextureData(UIImage* uiimage)
+{
+    CGImageRef image = uiimage.CGImage;
+    const int width = CGImageGetWidth(image);
+    const int height = CGImageGetHeight(image);
+    
+    const int dataSize = width * height * 4;
+    uint8_t* textureData = (uint8_t*)malloc(dataSize);
+    CGContextRef textureContext = CGBitmapContextCreate(textureData, width, height, 8, width * 4,
+                                                      CGImageGetColorSpace(image), kCGImageAlphaPremultipliedLast);
+    CGContextDrawImage(textureContext, CGRectMake(0.0, 0.0, (CGFloat)width, (CGFloat)height), image);
+    CGContextRelease(textureContext);
+    
+    uint handle;
+    glGenTextures(1, &handle);
+    glBindTexture(GL_TEXTURE_2D, handle);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    
+    glBindTexture(GL_TEXTURE_2D, 0);
+    free(textureData);
+    
+    return handle;
+}
+
+- (void)setupEnvMap
+{
+    float worldToView[16];
+    glGetFloatv(GL_MODELVIEW_MATRIX, worldToView);
+    glMatrixMode(GL_TEXTURE);
+    float mat[16] = {
+        0.5f * worldToView[0], -0.5 * worldToView[4], 0, 0,
+        0.5f * worldToView[1], -0.5 * worldToView[5], 0, 0,
+        0.5f * worldToView[2], -0.5 * worldToView[6], 0, 0,
+        0.5f, 0.5, 0, 1};
+    glLoadMatrixf(mat);
+    glBindTexture(GL_TEXTURE_2D, m_envMap);
+}
+
+
 
 - (id) initFromFile:(NSString *)file translation:(const ARdouble [3])translation rotation:(const ARdouble [4])rotation scale:(const ARdouble [3])scale config:(char *)config
 {
@@ -149,19 +202,19 @@ NSMutableArray * lightValues;
     // Ultimately, this should be cached via the app-wide OpenGL state cache.
     const GLfloat lightWhite100[]        =    {1.00, 1.00, 1.00, 1.0};    // RGBA all on full.
     const GLfloat lightWhite75[]        =    {0.75, 0.75, 0.75, 1.0};    // RGBA all on three quarters.
-    
     const GLfloat lightPosition0[]     =    {[[[lightValues objectAtIndex:0] objectAtIndex:0] floatValue],
         [[[lightValues objectAtIndex:0] objectAtIndex:1] floatValue],
         [[[lightValues objectAtIndex:0] objectAtIndex:2] floatValue],
         [[[lightValues objectAtIndex:0] objectAtIndex:3] floatValue]}; // A directional light (i.e. non positional).
     
-    const GLfloat lightPosition1[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
+    /*const GLfloat lightPosition1[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
     const GLfloat lightPosition2[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
     const GLfloat lightPosition3[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
     const GLfloat lightPosition4[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
     const GLfloat lightPosition5[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
     const GLfloat lightPosition6[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
-    const GLfloat lightPosition7[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
+    const GLfloat lightPosition7[]     =    {1.0f, 1.0f, 2.0f, 0.0f};*/
+    
     
     if (_visible) {
         glPushMatrix();
@@ -181,6 +234,7 @@ NSMutableArray * lightValues;
             glDisable(GL_LIGHT6);
             glDisable(GL_LIGHT7);
             glShadeModel(GL_SMOOTH);                // Do not flat shade polygons.
+            [self setupEnvMap];
             glStateCacheEnableLighting();
         } else glStateCacheDisableLighting();
         glmDrawArrays(glmModel, 0);
