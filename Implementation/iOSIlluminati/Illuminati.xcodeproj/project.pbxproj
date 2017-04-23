@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2632A0401EA514EE00C1AF1C /* Lights.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2632A03F1EA514EE00C1AF1C /* Lights.plist */; };
+		263921771EACC1000062DA55 /* Panorama.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 263921761EACC1000062DA55 /* Panorama.storyboard */; };
+		2639217A1EACC1530062DA55 /* PanoramaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 263921791EACC1530062DA55 /* PanoramaViewController.m */; };
 		2641529A1EA37ACD001D2BF7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 264152991EA37ACD001D2BF7 /* main.m */; };
 		2641529D1EA37ACD001D2BF7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2641529C1EA37ACD001D2BF7 /* AppDelegate.m */; };
 		264152A01EA37ACD001D2BF7 /* ARViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2641529F1EA37ACD001D2BF7 /* ARViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -50,6 +52,9 @@
 
 /* Begin PBXFileReference section */
 		2632A03F1EA514EE00C1AF1C /* Lights.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Lights.plist; path = Illuminati/Data2/Lights.plist; sourceTree = "<group>"; };
+		263921761EACC1000062DA55 /* Panorama.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Panorama.storyboard; sourceTree = "<group>"; };
+		263921781EACC1530062DA55 /* PanoramaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PanoramaViewController.h; sourceTree = "<group>"; };
+		263921791EACC1530062DA55 /* PanoramaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PanoramaViewController.m; sourceTree = "<group>"; };
 		264152951EA37ACD001D2BF7 /* Illuminati.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Illuminati.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		264152991EA37ACD001D2BF7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2641529B1EA37ACD001D2BF7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -1637,6 +1642,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		263921751EACC0E00062DA55 /* Panorama */ = {
+			isa = PBXGroup;
+			children = (
+				263921761EACC1000062DA55 /* Panorama.storyboard */,
+				263921781EACC1530062DA55 /* PanoramaViewController.h */,
+				263921791EACC1530062DA55 /* PanoramaViewController.m */,
+			);
+			name = Panorama;
+			sourceTree = "<group>";
+		};
 		2641528C1EA37ACD001D2BF7 = {
 			isa = PBXGroup;
 			children = (
@@ -1663,6 +1678,7 @@
 		264152971EA37ACD001D2BF7 /* Illuminati */ = {
 			isa = PBXGroup;
 			children = (
+				263921751EACC0E00062DA55 /* Panorama */,
 				264159951EA37F7C001D2BF7 /* Data2 */,
 				2641529B1EA37ACD001D2BF7 /* AppDelegate.h */,
 				2641529C1EA37ACD001D2BF7 /* AppDelegate.m */,
@@ -4147,6 +4163,7 @@
 				264152A51EA37ACD001D2BF7 /* Assets.xcassets in Resources */,
 				2632A0401EA514EE00C1AF1C /* Lights.plist in Resources */,
 				264152A31EA37ACD001D2BF7 /* Main.storyboard in Resources */,
+				263921771EACC1000062DA55 /* Panorama.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4166,6 +4183,7 @@
 				2641593C1EA37CFC001D2BF7 /* VEObjectOBJ.m in Sources */,
 				2641593D1EA37CFC001D2BF7 /* VirtualEnvironment.m in Sources */,
 				264152A01EA37ACD001D2BF7 /* ARViewController.m in Sources */,
+				2639217A1EACC1530062DA55 /* PanoramaViewController.m in Sources */,
 				2641529D1EA37ACD001D2BF7 /* AppDelegate.m in Sources */,
 				2641529A1EA37ACD001D2BF7 /* main.m in Sources */,
 			);
