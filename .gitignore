@@ -46,3 +46,6 @@ Handins/Report/main.synctex.gz
 
 #Test code
 Implementation/ARSimpleNativeCarsProj
+
+#OpenCV framework for iOS
+Implementation/iOSIlluminati/lib/opencv2.framework
