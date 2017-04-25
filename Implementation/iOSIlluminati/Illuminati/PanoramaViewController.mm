@@ -14,7 +14,7 @@
 
 @implementation PanoramaViewController
 
-@synthesize cvCamera;
+@synthesize cvCamera, motionManager;
 
 -(void)goToAR
 {
@@ -25,19 +25,48 @@
     
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.motionManager = [[CMMotionManager alloc] init];
+    //Gyroscope
+    if([self.motionManager isGyroAvailable])
+    {
+        self.motionManager.gyroUpdateInterval = 0.1f;
+        [self.motionManager startGyroUpdates];
+    }
+    else
+    {
+        NSLog(@"Gyroscope not Available!");
+    }
+    
+    //Accelerometer
+    if([self.motionManager isAccelerometerAvailable])
+    {
+        self.motionManager.accelerometerUpdateInterval = 0.1f;
+        [self.motionManager startAccelerometerUpdates];
+    }
+    else
+    {
+        NSLog(@"Accelerometer not Available!");
+    }
+
+
     self.cvCamera = [[CvVideoCamera alloc] initWithParentView:imageView];
     self.cvCamera.delegate = self;
-    self.cvCamera.defaultAVCaptureDevicePosition = AVCaptureDevicePositionFront;
+    self.cvCamera.defaultAVCaptureDevicePosition = AVCaptureDevicePositionBack;
     self.cvCamera.defaultAVCaptureSessionPreset = AVCaptureSessionPreset1280x720;
     self.cvCamera.defaultAVCaptureVideoOrientation = AVCaptureVideoOrientationPortrait;
     self.cvCamera.defaultFPS = 30;
+    //CGAffineTransform xform = CGAffineTransformMakeRotation(-M_PI / 2);
+    //imageView.transform = xform;
     [self.cvCamera start];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -59,13 +88,12 @@
 #ifdef __cplusplus
 - (void)processImage:(Mat&)image;
 {
-    // Do some OpenCV stuff with the image
+    // This is necessary to correct the image orientation
     Mat image_copy;
     cvtColor(image, image_copy, CV_BGRA2BGR);
-    
-    // invert image
-    bitwise_not(image_copy, image_copy);
-    cvtColor(image_copy, image, CV_BGR2BGRA);
+    flip(image_copy, image_copy, 1);
+    transpose(image_copy, image);
+
 }
 #endif
 

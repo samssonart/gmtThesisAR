@@ -51,6 +51,9 @@
 		265F90CF1EAE283100D9A5BE /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 265F90CE1EAE283100D9A5BE /* opencv2.framework */; };
 		265F90D11EAE28DF00D9A5BE /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 265F90D01EAE28DF00D9A5BE /* AssetsLibrary.framework */; };
 		265F90D31EAE2C8000D9A5BE /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 265F90D21EAE2C8000D9A5BE /* CoreImage.framework */; };
+		265F90D51EAE47C900D9A5BE /* horizontal.png in Resources */ = {isa = PBXBuildFile; fileRef = 265F90D41EAE47C900D9A5BE /* horizontal.png */; };
+		265F90D71EAE489300D9A5BE /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 265F90D61EAE489300D9A5BE /* arrow.png */; };
+		265F90D91EAE4AFB00D9A5BE /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 265F90D81EAE4AFB00D9A5BE /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1612,6 +1615,9 @@
 		265F90CE1EAE283100D9A5BE /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = lib/opencv2.framework; sourceTree = "<group>"; };
 		265F90D01EAE28DF00D9A5BE /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		265F90D21EAE2C8000D9A5BE /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		265F90D41EAE47C900D9A5BE /* horizontal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = horizontal.png; path = Assets.xcassets/horizontal.png; sourceTree = "<group>"; };
+		265F90D61EAE489300D9A5BE /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow.png; path = Assets.xcassets/arrow.png; sourceTree = "<group>"; };
+		265F90D81EAE4AFB00D9A5BE /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1619,6 +1625,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				265F90D91EAE4AFB00D9A5BE /* CoreMotion.framework in Frameworks */,
 				265F90D31EAE2C8000D9A5BE /* CoreImage.framework in Frameworks */,
 				265F90D11EAE28DF00D9A5BE /* AssetsLibrary.framework in Frameworks */,
 				265F90CF1EAE283100D9A5BE /* opencv2.framework in Frameworks */,
@@ -1695,6 +1702,8 @@
 				2641529F1EA37ACD001D2BF7 /* ARViewController.m */,
 				264152A11EA37ACD001D2BF7 /* Main.storyboard */,
 				264152A41EA37ACD001D2BF7 /* Assets.xcassets */,
+				265F90D61EAE489300D9A5BE /* arrow.png */,
+				265F90D41EAE47C900D9A5BE /* horizontal.png */,
 				264152A61EA37ACD001D2BF7 /* LaunchScreen.storyboard */,
 				264152A91EA37ACD001D2BF7 /* Info.plist */,
 				264152981EA37ACD001D2BF7 /* Supporting Files */,
@@ -4091,6 +4100,7 @@
 		264159101EA37BA8001D2BF7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				265F90D81EAE4AFB00D9A5BE /* CoreMotion.framework */,
 				265F90D21EAE2C8000D9A5BE /* CoreImage.framework */,
 				265F90D01EAE28DF00D9A5BE /* AssetsLibrary.framework */,
 				265F90CE1EAE283100D9A5BE /* opencv2.framework */,
@@ -4170,12 +4180,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				265F90D51EAE47C900D9A5BE /* horizontal.png in Resources */,
 				264159961EA37F83001D2BF7 /* Data2 in Resources */,
 				264152A81EA37ACD001D2BF7 /* LaunchScreen.storyboard in Resources */,
 				264152A51EA37ACD001D2BF7 /* Assets.xcassets in Resources */,
 				2632A0401EA514EE00C1AF1C /* Lights.plist in Resources */,
 				264152A31EA37ACD001D2BF7 /* Main.storyboard in Resources */,
 				263921771EACC1000062DA55 /* Panorama.storyboard in Resources */,
+				265F90D71EAE489300D9A5BE /* arrow.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
