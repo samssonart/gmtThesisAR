@@ -14,7 +14,14 @@
 
 @implementation PanoramaViewController
 
-@synthesize cvCamera, motionManager;
+CLLocationDirection oldDirection;
+NSMutableArray* capturedImages;
+BOOL capturing = NO;
+BOOL finishedCapturing = NO;
+
+@synthesize cvCamera, motionManager, locationManager;
+
+
 
 -(void)goToAR
 {
@@ -30,45 +37,90 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.motionManager = [[CMMotionManager alloc] init];
-    //Gyroscope
-    if([self.motionManager isGyroAvailable])
+    //Attitude
+    self.motionManager = [[CMMotionManager alloc]init];
+    [self.motionManager setDeviceMotionUpdateInterval:0.01f];
+    if (motionManager.deviceMotionAvailable)
     {
-        self.motionManager.gyroUpdateInterval = 0.1f;
-        [self.motionManager startGyroUpdates];
-    }
-    else
-    {
-        NSLog(@"Gyroscope not Available!");
+        [motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue mainQueue]withHandler:^(CMDeviceMotion *data, NSError *error)
+        {
+            //NSLog(@"Gravity: %f",data.attitude.pitch);
+            //Move the arrow image so that it is centered when the device is upright
+            [pitchIndicator setFrame:CGRectMake(20, data.attitude.pitch * 321.3333f, pitchIndicator.frame.size.width, pitchIndicator.frame.size.height)];
+        }];
     }
     
-    //Accelerometer
-    if([self.motionManager isAccelerometerAvailable])
-    {
-        self.motionManager.accelerometerUpdateInterval = 0.1f;
-        [self.motionManager startAccelerometerUpdates];
-    }
-    else
-    {
-        NSLog(@"Accelerometer not Available!");
-    }
+    //Heading
+    self.locationManager = [[CLLocationManager alloc] init];
+    locationManager.delegate = self;
+    locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
+    locationManager.distanceFilter = 1000.0f;
+    locationManager.headingFilter = 1.5;
+    [locationManager startUpdatingHeading];
+    oldDirection = 0;
+    
 
-
-    self.cvCamera = [[CvVideoCamera alloc] initWithParentView:imageView];
+    //CVCamera
+    capturedImages = [[NSMutableArray alloc] init];
+    self.cvCamera = [[CvPhotoCamera alloc] initWithParentView:imageView];
     self.cvCamera.delegate = self;
     self.cvCamera.defaultAVCaptureDevicePosition = AVCaptureDevicePositionBack;
     self.cvCamera.defaultAVCaptureSessionPreset = AVCaptureSessionPreset1280x720;
     self.cvCamera.defaultAVCaptureVideoOrientation = AVCaptureVideoOrientationPortrait;
     self.cvCamera.defaultFPS = 30;
-    //CGAffineTransform xform = CGAffineTransformMakeRotation(-M_PI / 2);
-    //imageView.transform = xform;
     [self.cvCamera start];
+      
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
+{
+    if (newHeading.headingAccuracy < 0 || finishedCapturing)
+        return;
+    
+    // Use the true heading if it is valid.
+    CLLocationDirection  theHeading = ((newHeading.trueHeading > 0) ? newHeading.trueHeading : newHeading.magneticHeading);
+    
+    //If we haven't begun capturing the panorama and the current heading isn't north do nothing
+    
+    capturing = YES;
+    //The device's camera has a roughly 35º FOV, so it's necessary to take snapshots every 17.5 - 18º (because the heading is in the center of the frame)
+    if((abs(theHeading - oldDirection) > 17) && (abs(theHeading - oldDirection) < 19))
+    {
+        NSLog(@"Current heading: %f",theHeading);
+        [cvCamera takePicture];
+        oldDirection = theHeading;
+        if(oldDirection > 355 && oldDirection < 5)
+            finishedCapturing = YES;
+    }
+    
+}
+
+- (void)photoCamera:(CvPhotoCamera*)photoCamera capturedImage:(UIImage *)image
+{
+    [capturedImages addObject:image];
+    if(finishedCapturing)
+        [self stitchImages];
+    
+}
+
+
+-(void)stitchImages
+{
+    
+    NSLog(@"Creating Panorama");
+    [CVWrapper processWithArray:capturedImages];
+    
+}
+
+
+- (void)photoCameraCancel:(CvPhotoCamera*)camera;
+{
 }
 
 /*
@@ -80,21 +132,5 @@
     // Pass the selected object to the new view controller.
 }
 */
-
-#pragma mark - Protocol CvVideoCameraDelegate
-//On Cocoa it's trivial to use C++ code, it's enough to use the __cplusplus precompile directive
-//and save the source file as .mm instead of .m for the compiler to understand that this is an Objective-C++ source (Obj-C mixed with C++)
-
-#ifdef __cplusplus
-- (void)processImage:(Mat&)image;
-{
-    // This is necessary to correct the image orientation
-    Mat image_copy;
-    cvtColor(image, image_copy, CV_BGRA2BGR);
-    flip(image_copy, image_copy, 1);
-    transpose(image_copy, image);
-
-}
-#endif
 
 @end

@@ -11,19 +11,26 @@ using namespace cv;
 
 #import <UIKit/UIKit.h>
 #import <CoreMotion/CoreMotion.h>
+#import <CoreLocation/CoreLocation.h>
+#import "CVWrapper.h"
 
-@interface PanoramaViewController : UIViewController<CvVideoCameraDelegate>
+@interface PanoramaViewController : UIViewController<CvPhotoCameraDelegate, CLLocationManagerDelegate>
 {
     
     IBOutlet UIImageView *pitchIndicator;
     IBOutlet UIImageView *imageView;
-    CvVideoCamera* cvCamera;
+    CvPhotoCamera* cvCamera;
+    CMMotionManager* motionManager;
+    CLLocationManager* locationManager;
+    
+
 }
 
 -(IBAction)goToAR;
+-(void)stitchImages;
 
-@property (nonatomic, retain) CvVideoCamera* cvCamera;
+@property (nonatomic, retain) CvPhotoCamera* cvCamera;
 @property (nonatomic, retain) CMMotionManager* motionManager;
-
+@property (nonatomic, retain) CLLocationManager* locationManager;
 
 @end

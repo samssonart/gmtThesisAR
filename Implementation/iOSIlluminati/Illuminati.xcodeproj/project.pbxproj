@@ -54,6 +54,10 @@
 		265F90D51EAE47C900D9A5BE /* horizontal.png in Resources */ = {isa = PBXBuildFile; fileRef = 265F90D41EAE47C900D9A5BE /* horizontal.png */; };
 		265F90D71EAE489300D9A5BE /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 265F90D61EAE489300D9A5BE /* arrow.png */; };
 		265F90D91EAE4AFB00D9A5BE /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 265F90D81EAE4AFB00D9A5BE /* CoreMotion.framework */; };
+		268E13D21EB75CB30028B206 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 268E13D11EB75CB30028B206 /* CoreLocation.framework */; };
+		26DEA3BB1EB8F09700066714 /* CVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 26DEA3BA1EB8F09700066714 /* CVWrapper.mm */; };
+		26DEA3BF1EB8F94000066714 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DEA3BE1EB8F94000066714 /* libc++.tbd */; };
+		26DEA3C01EB8FEED00066714 /* stitching.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DEA3BD1EB8F25000066714 /* stitching.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1618,6 +1622,12 @@
 		265F90D41EAE47C900D9A5BE /* horizontal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = horizontal.png; path = Assets.xcassets/horizontal.png; sourceTree = "<group>"; };
 		265F90D61EAE489300D9A5BE /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow.png; path = Assets.xcassets/arrow.png; sourceTree = "<group>"; };
 		265F90D81EAE4AFB00D9A5BE /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		268E13D11EB75CB30028B206 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		26DEA3B91EB8F09700066714 /* CVWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CVWrapper.h; sourceTree = "<group>"; };
+		26DEA3BA1EB8F09700066714 /* CVWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CVWrapper.mm; sourceTree = "<group>"; };
+		26DEA3BC1EB8F21300066714 /* stitching.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stitching.h; sourceTree = "<group>"; };
+		26DEA3BD1EB8F25000066714 /* stitching.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = stitching.cpp; sourceTree = "<group>"; };
+		26DEA3BE1EB8F94000066714 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1625,6 +1635,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26DEA3BF1EB8F94000066714 /* libc++.tbd in Frameworks */,
+				268E13D21EB75CB30028B206 /* CoreLocation.framework in Frameworks */,
 				265F90D91EAE4AFB00D9A5BE /* CoreMotion.framework in Frameworks */,
 				265F90D31EAE2C8000D9A5BE /* CoreImage.framework in Frameworks */,
 				265F90D11EAE28DF00D9A5BE /* AssetsLibrary.framework in Frameworks */,
@@ -1664,6 +1676,10 @@
 				263921761EACC1000062DA55 /* Panorama.storyboard */,
 				263921781EACC1530062DA55 /* PanoramaViewController.h */,
 				263921791EACC1530062DA55 /* PanoramaViewController.mm */,
+				26DEA3B91EB8F09700066714 /* CVWrapper.h */,
+				26DEA3BA1EB8F09700066714 /* CVWrapper.mm */,
+				26DEA3BC1EB8F21300066714 /* stitching.h */,
+				26DEA3BD1EB8F25000066714 /* stitching.cpp */,
 			);
 			name = Panorama;
 			sourceTree = "<group>";
@@ -4100,6 +4116,8 @@
 		264159101EA37BA8001D2BF7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				26DEA3BE1EB8F94000066714 /* libc++.tbd */,
+				268E13D11EB75CB30028B206 /* CoreLocation.framework */,
 				265F90D81EAE4AFB00D9A5BE /* CoreMotion.framework */,
 				265F90D21EAE2C8000D9A5BE /* CoreImage.framework */,
 				265F90D01EAE28DF00D9A5BE /* AssetsLibrary.framework */,
@@ -4198,6 +4216,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26DEA3C01EB8FEED00066714 /* stitching.cpp in Sources */,
 				264159361EA37CFC001D2BF7 /* ARMarker.m in Sources */,
 				264159371EA37CFC001D2BF7 /* ARMarkerMulti.m in Sources */,
 				264159381EA37CFC001D2BF7 /* ARMarkerSquare.m in Sources */,
@@ -4210,6 +4229,7 @@
 				2639217A1EACC1530062DA55 /* PanoramaViewController.mm in Sources */,
 				2641529D1EA37ACD001D2BF7 /* AppDelegate.m in Sources */,
 				2641529A1EA37ACD001D2BF7 /* main.m in Sources */,
+				26DEA3BB1EB8F09700066714 /* CVWrapper.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
