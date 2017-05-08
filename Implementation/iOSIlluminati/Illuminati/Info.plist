@@ -37,6 +37,8 @@
 	</array>
 	<key>NSLocationUsageDescription</key>
 	<string>To approximate the sun&apos;s position relative to the device.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>To store the panorama</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

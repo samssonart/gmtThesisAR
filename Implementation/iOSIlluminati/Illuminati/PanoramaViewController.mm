@@ -18,17 +18,21 @@ CLLocationDirection oldDirection;
 NSMutableArray* capturedImages;
 BOOL capturing = NO;
 BOOL finishedCapturing = NO;
+int photoCounter = 0;
 
-@synthesize cvCamera, motionManager, locationManager;
+@synthesize cvCamera, motionManager, locationManager, panoramaRes;
 
 
 
 -(void)goToAR
 {
     
-    UIStoryboard* ARStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    UIViewController* initialARVC = [ARStoryboard instantiateInitialViewController];
-    [self presentViewController:initialARVC animated:false completion:nil];
+    [self saveImages];
+    [CVWrapper lumaAnalizer:panoramaRes];
+    
+    //UIStoryboard* ARStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    //UIViewController* initialARVC = [ARStoryboard instantiateInitialViewController];
+    //[self presentViewController:initialARVC animated:false completion:nil];
     
 }
 
@@ -37,6 +41,7 @@ BOOL finishedCapturing = NO;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    panoramaRes = [[UIImage alloc]init];
     //Attitude
     self.motionManager = [[CMMotionManager alloc]init];
     [self.motionManager setDeviceMotionUpdateInterval:0.01f];
@@ -65,10 +70,11 @@ BOOL finishedCapturing = NO;
     self.cvCamera = [[CvPhotoCamera alloc] initWithParentView:imageView];
     self.cvCamera.delegate = self;
     self.cvCamera.defaultAVCaptureDevicePosition = AVCaptureDevicePositionBack;
-    self.cvCamera.defaultAVCaptureSessionPreset = AVCaptureSessionPreset1280x720;
+    self.cvCamera.defaultAVCaptureSessionPreset = AVCaptureSessionPreset352x288;
     self.cvCamera.defaultAVCaptureVideoOrientation = AVCaptureVideoOrientationPortrait;
     self.cvCamera.defaultFPS = 30;
     [self.cvCamera start];
+    [self.cvCamera lockFocus];
       
 }
 
@@ -86,17 +92,19 @@ BOOL finishedCapturing = NO;
     // Use the true heading if it is valid.
     CLLocationDirection  theHeading = ((newHeading.trueHeading > 0) ? newHeading.trueHeading : newHeading.magneticHeading);
     
-    //If we haven't begun capturing the panorama and the current heading isn't north do nothing
+    //NSLog(@"Current heading: %f",theHeading);
     
     capturing = YES;
     //The device's camera has a roughly 35º FOV, so it's necessary to take snapshots every 17.5 - 18º (because the heading is in the center of the frame)
-    if((abs(theHeading - oldDirection) > 17) && (abs(theHeading - oldDirection) < 19))
+    if((abs(theHeading - oldDirection) > 15) && (abs(theHeading - oldDirection) < 17))
     {
+        photoCounter++;
+        if(photoCounter >= 22) finishedCapturing = YES;
         NSLog(@"Current heading: %f",theHeading);
         [cvCamera takePicture];
         oldDirection = theHeading;
-        if(oldDirection > 355 && oldDirection < 5)
-            finishedCapturing = YES;
+        
+        
     }
     
 }
@@ -105,16 +113,46 @@ BOOL finishedCapturing = NO;
 {
     [capturedImages addObject:image];
     if(finishedCapturing)
-        [self stitchImages];
+    {
+        //[self stitchImages];
+        [self saveImages];
+        [CVWrapper lumaAnalizer:panoramaRes];
+    }
     
 }
 
+
+- (void) saveImages
+{
+    NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
+    panoramaRes = [[UIImage alloc]initWithContentsOfFile:[bundlePath stringByAppendingPathComponent:@"Data2/environment.jpg"]];
+    for (id image in capturedImages)
+    {
+       UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+        
+    }
+    
+}
 
 -(void)stitchImages
 {
     
     NSLog(@"Creating Panorama");
-    [CVWrapper processWithArray:capturedImages];
+    panoramaRes = [CVWrapper processWithArray:capturedImages];
+    if(panoramaRes.size.height < 10 || panoramaRes.size.width <10) return;
+    
+    UIImageWriteToSavedPhotosAlbum(panoramaRes, nil, nil, nil);
+    
+    NSData* imageData = UIImageJPEGRepresentation(panoramaRes, 0.9);
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"pano.jpg"];
+    NSError *writeError = nil;
+    [imageData writeToFile:filePath options:NSDataWritingAtomic error:&writeError];
+    
+    if (writeError) {
+        NSLog(@"Error writing file: %@", writeError);
+    }
+    
     
 }
 

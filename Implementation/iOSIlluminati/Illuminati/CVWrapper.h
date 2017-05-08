@@ -14,6 +14,6 @@
 + (UIImage*) processWithArray:(NSArray*)imageArray;
 + (Mat)cvMatFromUIImage:(UIImage *)image;
 + (UIImage *)UIImageFromCVMat:(Mat)cvMat;
-
++ (void)lumaAnalizer:(UIImage *)panorama;
 
 @end

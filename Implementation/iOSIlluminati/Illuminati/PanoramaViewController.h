@@ -19,6 +19,7 @@ using namespace cv;
     
     IBOutlet UIImageView *pitchIndicator;
     IBOutlet UIImageView *imageView;
+    UIImage* panoramaRes;
     CvPhotoCamera* cvCamera;
     CMMotionManager* motionManager;
     CLLocationManager* locationManager;
@@ -28,9 +29,11 @@ using namespace cv;
 
 -(IBAction)goToAR;
 -(void)stitchImages;
+-(void)saveImages;
 
 @property (nonatomic, retain) CvPhotoCamera* cvCamera;
 @property (nonatomic, retain) CMMotionManager* motionManager;
 @property (nonatomic, retain) CLLocationManager* locationManager;
+@property (nonatomic, retain) UIImage* panoramaRes;
 
 @end

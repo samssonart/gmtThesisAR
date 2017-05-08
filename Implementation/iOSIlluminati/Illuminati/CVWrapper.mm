@@ -29,7 +29,7 @@
     
     CGContextDrawImage(contextRef, CGRectMake(0, 0, cols, rows), image.CGImage);
     CGContextRelease(contextRef);
-    
+    cvtColor(cvMat, cvMat, CV_RGBA2RGB);
     return cvMat;
 }
 
@@ -38,9 +38,11 @@
     NSData *data = [NSData dataWithBytes:cvMat.data length:cvMat.elemSize()*cvMat.total()];
     CGColorSpaceRef colorSpace;
     
-    if (cvMat.elemSize() == 1) {
+    if (cvMat.elemSize() == 1)
+    {
         colorSpace = CGColorSpaceCreateDeviceGray();
-    } else {
+    } else
+    {
         colorSpace = CGColorSpaceCreateDeviceRGB();
     }
     
@@ -72,13 +74,15 @@
 
 + (UIImage*) processWithArray:(NSArray*)imageArray
 {
-    if ([imageArray count]==0){
+    if ([imageArray count]==0)
+    {
         NSLog (@"imageArray is empty");
         return 0;
     }
     vector<Mat> matImages;
     
-    for (id image in imageArray) {
+    for (id image in imageArray)
+    {
         if ([image isKindOfClass: [UIImage class]])
         {
             
@@ -89,7 +93,15 @@
     NSLog (@"stitching...");
     cv::Mat stitchedMat = stitch (matImages);
     UIImage* result =  [self UIImageFromCVMat: stitchedMat];
+    vector<Mat>().swap(matImages);
     return result;
+}
+
++ (void) lumaAnalizer:(UIImage *)panorama
+{
+    NSLog(@"Analizing light sources");
+    Mat cvPano = [self cvMatFromUIImage:panorama];
+    lumaAnalizer(cvPano);
 }
 
 @end
