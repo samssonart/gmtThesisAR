@@ -19,6 +19,12 @@
 using namespace cv;
 using namespace std;
 
+struct LightParams
+{
+    
+    Vec3f position;
+};
+
 Mat stitch (vector <Mat> & images);
 void lumaAnalizer(Mat cvPano);
 

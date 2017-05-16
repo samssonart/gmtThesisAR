@@ -11,9 +11,10 @@
 
 @interface CVWrapper : NSObject
 
-+ (UIImage*) processWithArray:(NSArray*)imageArray;
++ (UIImage*) processWithArray:(NSArray __strong**)imageArray;
 + (Mat)cvMatFromUIImage:(UIImage *)image;
 + (UIImage *)UIImageFromCVMat:(Mat)cvMat;
 + (void)lumaAnalizer:(UIImage *)panorama;
++ (UIImage *)rotateToImageOrientation: (UIImage *)image;
 
 @end

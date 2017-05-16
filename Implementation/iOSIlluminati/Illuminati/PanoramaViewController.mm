@@ -96,10 +96,10 @@ int photoCounter = 0;
     
     capturing = YES;
     //The device's camera has a roughly 35º FOV, so it's necessary to take snapshots every 17.5 - 18º (because the heading is in the center of the frame)
-    if((abs(theHeading - oldDirection) > 15) && (abs(theHeading - oldDirection) < 17))
+    if((abs(theHeading - oldDirection) > 35) && (abs(theHeading - oldDirection) < 37))
     {
         photoCounter++;
-        if(photoCounter >= 22) finishedCapturing = YES;
+        if(photoCounter >= 10) finishedCapturing = YES;
         NSLog(@"Current heading: %f",theHeading);
         [cvCamera takePicture];
         oldDirection = theHeading;
@@ -111,24 +111,41 @@ int photoCounter = 0;
 
 - (void)photoCamera:(CvPhotoCamera*)photoCamera capturedImage:(UIImage *)image
 {
+    NSLog(@"Picture taken");
     [capturedImages addObject:image];
+    
     if(finishedCapturing)
     {
-        //[self stitchImages];
-        [self saveImages];
+        //[self saveImages];
+        [self stitchImages];
         [CVWrapper lumaAnalizer:panoramaRes];
     }
     
 }
 
+- (void)imageSavedToPhotosAlbum:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
+    if (error)
+    {
+        NSLog(@"Error saving image %@", error);
+        [self tryWriteAgain:image];
+    }
+}
+
+-(void)tryWriteAgain:(UIImage *)image
+{
+    NSLog(@"Trying again");
+    UIImageWriteToSavedPhotosAlbum(image, self, @selector(imageSavedToPhotosAlbum: didFinishSavingWithError: contextInfo:), nil);
+}
 
 - (void) saveImages
 {
-    NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
-    panoramaRes = [[UIImage alloc]initWithContentsOfFile:[bundlePath stringByAppendingPathComponent:@"Data2/environment.jpg"]];
+    //NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
+    //panoramaRes = [[UIImage alloc]initWithContentsOfFile:[bundlePath stringByAppendingPathComponent:@"Data2/environment.jpg"]];
+    
     for (id image in capturedImages)
     {
-       UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+       UIImageWriteToSavedPhotosAlbum(image, self, @selector(imageSavedToPhotosAlbum: didFinishSavingWithError: contextInfo:), nil);
+        sleep(1);
         
     }
     
@@ -138,7 +155,8 @@ int photoCounter = 0;
 {
     
     NSLog(@"Creating Panorama");
-    panoramaRes = [CVWrapper processWithArray:capturedImages];
+    panoramaRes = [CVWrapper processWithArray:&capturedImages];
+    [capturedImages removeAllObjects];
     if(panoramaRes.size.height < 10 || panoramaRes.size.width <10) return;
     
     UIImageWriteToSavedPhotosAlbum(panoramaRes, nil, nil, nil);
@@ -149,7 +167,8 @@ int photoCounter = 0;
     NSError *writeError = nil;
     [imageData writeToFile:filePath options:NSDataWritingAtomic error:&writeError];
     
-    if (writeError) {
+    if (writeError)
+    {
         NSLog(@"Error writing file: %@", writeError);
     }
     
