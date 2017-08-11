@@ -1,0 +1,64 @@
+\documentclass{report}
+\usepackage[utf8]{inputenc}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{url}
+\usepackage{commath}
+\usepackage{gensymb}
+
+\title{Realtime Environment Lighting Simulation for Augmented Reality Applications}
+\author{Marco Antonio Salcedo Sanson }
+\date{August 2017}
+
+% Definition of \maketitle
+\makeatletter         
+\def\@maketitle{
+\noindent
+\begin{center}
+{\huge \bfseries \sffamily \@title }\\[4ex] 
+{\Large  \@author}\\[4ex] 
+\@date\\[8ex]
+\end{center}}
+\makeatother
+
+
+\begin{document}
+\begin{figure}[t]
+\includegraphics[scale = 0.5]{Figures/uu-logo.png}
+\end{figure}
+
+\maketitle
+\clearpage
+
+\tableofcontents{}
+\clearpage
+
+\chapter{Introduction}
+\input{intro}
+
+
+\chapter{Related Work}
+\input{relat}
+
+\chapter{Theoretical Framework}
+\input{theo}
+
+\chapter{Method}
+\input{method}
+
+\chapter{Implementation}
+\input{impl}
+
+\chapter{Experiment}
+\input{expected}
+
+\chapter{Discussion}
+\input{conclu}
+
+\clearpage
+
+\bibliographystyle{plain}
+\nocite{*}
+\bibliography{references}
+\end{document}

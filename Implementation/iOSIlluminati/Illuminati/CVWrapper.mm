@@ -194,9 +194,26 @@
 
 + (void) lumaAnalizer:(UIImage *)panorama
 {
+    vector<LightParams> panoramaLights;
+    NSMutableDictionary* plistLights = [NSMutableDictionary dictionaryWithCapacity:8];
+    NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
     NSLog(@"Analizing light sources");
     Mat cvPano = [self cvMatFromUIImage:panorama];
-    lumaAnalizer(cvPano);
+    panoramaLights = lumaAnalizer(cvPano);
+    for (int i = 0; i<panoramaLights.size();++i)
+    {
+        NSString* key = [NSString stringWithFormat:@"LIGHT%d",i ];
+        [plistLights setObject:[NSString stringWithFormat:@"%f, %f, %f, 0.0",panoramaLights[i].position[0], panoramaLights[i].position[1], panoramaLights[i].position[2] ] forKey:key];
+        NSLog(@" %@: = %@ \n", key, [plistLights objectForKey:key]);
+        
+    }
+    for (int j = 7; j >= panoramaLights.size() ; --j)
+    {
+        NSString* key = [NSString stringWithFormat:@"LIGHT%d",j ];
+        [plistLights setObject:[NSString stringWithFormat:@"0.0, 0.0, 0.0, 0.0"] forKey:key];
+        
+    }
+    [plistLights writeToFile:[bundlePath stringByAppendingPathComponent:@"Data2/Lights.plist"] atomically:YES];
 }
 
 @end

@@ -15,6 +15,8 @@
 #include <opencv2/imgproc.hpp>
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/stitching.hpp"
+#include <AR/ar.h>
+#include <AR/video.h>
 
 using namespace cv;
 using namespace std;
@@ -25,7 +27,8 @@ struct LightParams
     Vec3f position;
 };
 
+float distanceToMarker();
 Mat stitch (vector <Mat> & images);
-void lumaAnalizer(Mat cvPano);
+vector<LightParams> lumaAnalizer(Mat cvPano);
 
 #endif /* stitching_h */

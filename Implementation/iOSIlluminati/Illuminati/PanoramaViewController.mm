@@ -27,12 +27,12 @@ int photoCounter = 0;
 -(void)goToAR
 {
     
-    [self saveImages];
-    [CVWrapper lumaAnalizer:panoramaRes];
+    //[self saveImages];
+    //[CVWrapper lumaAnalizer:panoramaRes];
     
-    //UIStoryboard* ARStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    //UIViewController* initialARVC = [ARStoryboard instantiateInitialViewController];
-    //[self presentViewController:initialARVC animated:false completion:nil];
+    UIStoryboard* ARStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController* initialARVC = [ARStoryboard instantiateInitialViewController];
+    [self presentViewController:initialARVC animated:false completion:nil];
     
 }
 
@@ -70,7 +70,7 @@ int photoCounter = 0;
     self.cvCamera = [[CvPhotoCamera alloc] initWithParentView:imageView];
     self.cvCamera.delegate = self;
     self.cvCamera.defaultAVCaptureDevicePosition = AVCaptureDevicePositionBack;
-    self.cvCamera.defaultAVCaptureSessionPreset = AVCaptureSessionPreset352x288;
+    self.cvCamera.defaultAVCaptureSessionPreset = AVCaptureSessionPresetLow;
     self.cvCamera.defaultAVCaptureVideoOrientation = AVCaptureVideoOrientationPortrait;
     self.cvCamera.defaultFPS = 30;
     [self.cvCamera start];
@@ -96,15 +96,13 @@ int photoCounter = 0;
     
     capturing = YES;
     //The device's camera has a roughly 35º FOV, so it's necessary to take snapshots every 17.5 - 18º (because the heading is in the center of the frame)
-    if((abs(theHeading - oldDirection) > 35) && (abs(theHeading - oldDirection) < 37))
+    if((abs(theHeading - oldDirection) > 39) && (abs(theHeading - oldDirection) < 41))
     {
         photoCounter++;
-        if(photoCounter >= 10) finishedCapturing = YES;
+        if(photoCounter >= 9) finishedCapturing = YES;
         NSLog(@"Current heading: %f",theHeading);
         [cvCamera takePicture];
         oldDirection = theHeading;
-        
-        
     }
     
 }
@@ -119,6 +117,7 @@ int photoCounter = 0;
         //[self saveImages];
         [self stitchImages];
         [CVWrapper lumaAnalizer:panoramaRes];
+        [self goToAR];
     }
     
 }
@@ -171,7 +170,6 @@ int photoCounter = 0;
     {
         NSLog(@"Error writing file: %@", writeError);
     }
-    
     
 }
 

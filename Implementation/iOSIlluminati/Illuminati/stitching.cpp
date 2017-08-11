@@ -8,6 +8,33 @@
 
 #include "stitching.h"
 
+ARHandle *arHandle;
+AR3DHandle *ar3DHandle;
+ARPattHandle *arPattHandle;
+ARMarkerInfo *markerInfo;
+int markerNum;
+int patt_id;
+ARdouble err;
+ARParamLT *gCparamLT = NULL;
+
+
+float distanceToMarker(Mat panoramic)
+{
+    float dist = 0.0f;
+    int markerPixelHeight = 180;
+    
+    Mat image1 = panoramic;
+    Mat bgraMat;
+    cvtColor(image1, bgraMat, CV_BGR2RGBA);
+    
+    //2.4 is the device camera focal legth, 90 is the physical height of the marker and 31 is the sensor height. All measured in millimeters
+    //dist = (2.4f * 90.0f * image1.rows) / ((float)markerPixelHeight * 31.0f);
+    dist = (90.0f * 1400.0f) / markerPixelHeight;
+    
+    return dist;
+    
+}
+
 
 Mat stitch (vector<Mat>& images)
 {
@@ -33,7 +60,7 @@ Mat stitch (vector<Mat>& images)
     
 }
 
-void lumaAnalizer(Mat cvPano)
+vector<LightParams> lumaAnalizer(Mat cvPano)
 {
     vector<int> plausibleAreas;
     vector<LightParams> sceneLights;
@@ -55,7 +82,7 @@ void lumaAnalizer(Mat cvPano)
     cout << "stats:" << endl << "(left,top,width,height,area)" << endl << stats << endl << endl;
     cout << "centroids:" << endl << "(x, y)" << endl << centroids << endl << endl;
     
-    for (int l = 1; l < nLabels; ++l)
+    for (unsigned int l = 1; l < nLabels; ++l)
     {
         if(stats.at<int>(l,CC_STAT_AREA) > (stats.at<int>(0,CC_STAT_AREA)*0.0025f))
         {
@@ -68,23 +95,38 @@ void lumaAnalizer(Mat cvPano)
     
     float x = 0.0f;
     float y = 0.0f;
+    float z = 0.0f;
     Vec3f lightPos;
     
-    for(int l = 0;l<plausibleAreas.size();++l)
+    for(unsigned int l = 0;l<plausibleAreas.size();++l)
     {
         
         x = centroids.at<double>((double)plausibleAreas[l],0);
         y = centroids.at<double>((double)plausibleAreas[l],1);
         
-        float rho = x * (360.0f/cvPano.cols);
-        float phi = abs(cvPano.rows*0.5 - y)*(120.0f/cvPano.rows);
+        float rho = (x * 360.0f)/cvPano.cols;
+        cout << "Angle h: "<< rho << endl;
         
-        x = rho*cos(phi*0.01745329252f);//Degrees to radians conversion constant
-        y = rho*sin(phi*0.01745329252f);
+        float phi = 90.0f - (y * 180.0f)/cvPano.rows;
+        if (phi < 0.0f ) phi = 360.0f + phi;
+        
+        float gammma = 90.0f - rho;
+        
+        
+        cout << "Angle v: "<< phi << endl;
+        
+        x = cos(rho*0.01745329252f);
+        y = cos(phi*0.01745329252f);
+        z = cos(gammma*0.01745329252f);
+
+        if(centroids.at<double>((double)plausibleAreas[l],0) > cvPano.cols/2)
+        {
+            x *= -1;
+        }
         
         lightPos[0] = x;
         lightPos[1] = y;
-        lightPos[2] = 4.0f;
+        lightPos[2] = z;
         
         LightParams currentParams;
         currentParams.position = lightPos;
@@ -92,5 +134,6 @@ void lumaAnalizer(Mat cvPano)
         
     }
 
+    return sceneLights;
     //cout << "Plausible areas " << plausibleAreas.size() << " out of " << nLabels << " total areas" << endl;
 }

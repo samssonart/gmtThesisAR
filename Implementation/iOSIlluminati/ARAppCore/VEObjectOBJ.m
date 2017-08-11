@@ -196,19 +196,52 @@ uint CreateTextureData(UIImage* uiimage)
     [super willBeRemovedFromEnvironment:environment];
 }
 
+- (BOOL) isEqual: (float)a toNumber: (float)b
+{
+    if(fabsf(a-b)<0.00001f) return YES;
+    else return NO;
+    
+}
+
 -(void) draw:(NSNotification *)notification
 {
     // Lighting setup.
     // Ultimately, this should be cached via the app-wide OpenGL state cache.
+    int activeLights = 0;
+    GLfloat lightPositions[7][4] = {{0}};
     const GLfloat lightWhite100[]        =    {1.00, 1.00, 1.00, 1.0};    // RGBA all on full.
     const GLfloat lightWhite75[]        =    {0.75, 0.75, 0.75, 1.0};    // RGBA all on three quarters.
+    
+    
+    for(int i = 0; i<7;++i)
+    {
+        for(int j = 0;j<4;++j)
+        {
+            lightPositions[i][j] = [[[lightValues objectAtIndex:i] objectAtIndex:j] floatValue];
+        }
+        
+        if([self isEqual:lightPositions[i][0] toNumber:0.0f] && [self isEqual:lightPositions[i][1] toNumber:0.0f] && [self isEqual:lightPositions[i][2] toNumber:0.0f])
+        {
+            
+            break;
+        }
+        activeLights++;
+    }
+    
+    /*
     const GLfloat lightPosition0[]     =    {[[[lightValues objectAtIndex:0] objectAtIndex:0] floatValue],
         [[[lightValues objectAtIndex:0] objectAtIndex:1] floatValue],
         [[[lightValues objectAtIndex:0] objectAtIndex:2] floatValue],
         [[[lightValues objectAtIndex:0] objectAtIndex:3] floatValue]}; // A directional light (i.e. non positional).
     
-    /*const GLfloat lightPosition1[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
-    const GLfloat lightPosition2[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
+    const GLfloat lightPosition1[]     =    {[[[lightValues objectAtIndex:1] objectAtIndex:0] floatValue],
+        [[[lightValues objectAtIndex:1] objectAtIndex:1] floatValue],
+        [[[lightValues objectAtIndex:1] objectAtIndex:2] floatValue],
+        [[[lightValues objectAtIndex:1] objectAtIndex:3] floatValue]};
+    const GLfloat lightPosition2[]     =    {[[[lightValues objectAtIndex:2] objectAtIndex:0] floatValue],
+        [[[lightValues objectAtIndex:2] objectAtIndex:1] floatValue],
+        [[[lightValues objectAtIndex:2] objectAtIndex:2] floatValue],
+        [[[lightValues objectAtIndex:2] objectAtIndex:3] floatValue]};
     const GLfloat lightPosition3[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
     const GLfloat lightPosition4[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
     const GLfloat lightPosition5[]     =    {1.0f, 1.0f, 2.0f, 0.0f};
@@ -221,24 +254,36 @@ uint CreateTextureData(UIImage* uiimage)
         glMultMatrixf(_poseInEyeSpace.T);
         glMultMatrixf(_localPose.T);
         if (_lit) {
+            
+            for(int l=0;l<activeLights;++l)
+            {
+                glLightfv(GL_LIGHT0+l, GL_DIFFUSE, lightWhite100);
+                glLightfv(GL_LIGHT0+l, GL_SPECULAR, lightWhite100);
+                glLightfv(GL_LIGHT0+l, GL_AMBIENT, lightWhite75);            // Default ambient = {0,0,0,0}.
+                glLightfv(GL_LIGHT0+l, GL_POSITION, lightPositions[l]);
+                glEnable(GL_LIGHT0+l);
+                
+            }
+            /*
             glLightfv(GL_LIGHT0, GL_DIFFUSE, lightWhite100);
             glLightfv(GL_LIGHT0, GL_SPECULAR, lightWhite100);
             glLightfv(GL_LIGHT0, GL_AMBIENT, lightWhite75);            // Default ambient = {0,0,0,0}.
-            glLightfv(GL_LIGHT0, GL_POSITION, lightPosition0);
+            glLightfv(GL_LIGHT0, GL_POSITION, lightPositions[0]);
             glEnable(GL_LIGHT0);
-            glDisable(GL_LIGHT1);
-            glDisable(GL_LIGHT2);
-            glDisable(GL_LIGHT3);
-            glDisable(GL_LIGHT4);
-            glDisable(GL_LIGHT5);
-            glDisable(GL_LIGHT6);
-            glDisable(GL_LIGHT7);
+             */
+            for(int nl = 7; nl >= 7-activeLights;--nl)
+            {
+                glDisable(GL_LIGHT0+nl);
+
+                
+            }
             glShadeModel(GL_SMOOTH);                // Do not flat shade polygons.
             [self setupEnvMap];
             glStateCacheEnableLighting();
         } else glStateCacheDisableLighting();
         glmDrawArrays(glmModel, 0);
         glPopMatrix();
+        
     }
 }
 
