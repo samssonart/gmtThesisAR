@@ -20,3 +20,44 @@ In order to describe a color of a light source it is important to have detailed 
 D65 corresponds roughly to the average midday light in Western Europe / Northern Europe (comprising both direct sunlight and the light diffused by a clear sky), hence it is also called a daylight illuminant. It has a correlated colour temperature of approximately $6500 K$. As any standard illuminant is represented as a table of averaged spectrophotometric data, any light source which statistically has the same relative spectral power distribution (SPD) can be considered a D65 light source. It is important to note that D65 is purely theoretical, there are no actual artificial D65 light sources.\cite{DeeSixFive}
 
 \section{Panoramic photography}
+Panoramic photography is a technique of photography, using specialized equipment or software, that captures images with horizontally, and sometimes also vertically, elongated fields of view. While there is no formal definition of the minimum field of view required for a photograph to be considered panoramic, in this work the interest is focused upon those that capture the entire 360 degrees of horizontal field of view. \newline
+There are different kinds of panoramic images, the most intuitive is the one called wide format photograph. It basically consists of a series of photos taken from the same height and later stitched together to appear as a single wide image. The image can be then projected on to a cylinder. This kind of panoramic photograph captures 360 degrees of horizontal field of view, while the vertical field of view is dependant entirely on the lens used to capture the individual photographs. Figure 3.1 shows an example of a cylindrical panoramic image. 
+
+\begin{figure}[H]
+  \centering
+  \setlength{\unitlength}{\textwidth} 
+    \begin{picture}(1,0.5)
+       \put(-0.1,0){\includegraphics[width=1.3\unitlength]{Figures/pano6.jpg}}
+       
+    \end{picture}
+    \caption{A cylindrical panorama of Trafalgar Square}
+\end{figure}
+
+The type of panoramic image used in this method is called equirectangular panoramic image, or spherical panoramic image, due to the fact that the resulting image can be projected on to a sphere. The projection maps meridians to vertical straight lines of constant spacing, and circles of latitude to horizontal straight lines of constant spacing. This kind of projection introduces the types of distortion often seen in spherical projections, such as Mercator, the poles of the sphere appear bigger than they really are. The process used by Google to create equirectangular panoramic images on mobile devices involves taking several pictures of the environment and using the device's sensors prematurely project them onto a sphere in their position relative to Earth's north. Once all pictures are captured they are stitched together in a similar manner as for cylindrical mapping, for each individual image features are identified, those same features are searched on neighboring images and aligned and the overlap is blended, resulting in a seamless, yet distorted representation of all the images as one. After this, the projection is applied as follows: \newline
+
+\begin{equation}
+    \lambda = \frac{x}{cos(\phi_l )} + \lambda_0
+\end{equation}
+
+\begin{equation}
+    \phi = y + \phi_l
+\end{equation}
+
+Where: \newline
+$\lambda$ is the longitude of the location to project. \newline
+$\phi$ is the latitude of the location to project. \newline
+$\phi_l$ are the standard parallels (north and south of the equator) where the scale of the projection is true. \newline
+$\lambda_0$ is the central meridian of the map. \newline
+$x$ is the horizontal coordinate of the projected location on the map. \newline
+$y$ is the vertical coordinate of the projected location on the map. \newline
+
+The kind of expected result can be seen on figure 3.2
+\begin{figure}[H]
+  \centering
+  \setlength{\unitlength}{\textwidth} 
+    \begin{picture}(0.8,0.5)
+       \put(-0.1,0){\includegraphics[width=1.0\unitlength]{Figures/equirectangular.jpg}}
+       
+    \end{picture}
+    \caption{An average indoors equirectangular panorama}
+\end{figure}

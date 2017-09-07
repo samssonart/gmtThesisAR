@@ -104,12 +104,17 @@ The original sphere panoramic photograph is widely used in the real time phase. 
 
 \item Cubemap: The image coordinates are first converted to polar and divided into four regions by latitude $-\Pi/4 < \theta < \Pi/4 , \Pi/4 < \theta < 3\Pi/4, 3\Pi/4 < \theta < 5\Pi/4, 5\Pi/4 < \theta < 7\Pi/4$. These represent either one of the four faces of the cube, top or bottom. The projected coordinate is given by:
 \begin{equation}
-P = (1, tan(\phi), \frac{cot(\theta)}{cos(\phi)}
+P = (1, tan(\phi), \frac{cot(\theta)}{cos(\phi)})
 \end{equation}
  The projected point is always on the top if $ \frac{cot(\theta)} { (1/\sqrt{2}) }> 1$ or $tan(\theta)< \frac{1}{\sqrt{2}}$ \newline
  
  The projected points for each face of the cube are composed into an image and each image stitched together to create a cross cube map.
  
- \item Ambient contribution: 
+ \item Ambient contribution: The environment lighting contribution is done via shader. The ambient contribution is reduced to a single value in the range of $0$ and $1$ and then the albedo color component of the object's shader is multiplied by this value. The result is a dimmer color when the ambient light is low. 
+ The ambient contribution value itself is obtained by calculating the mean of the luminance panoramic image, since this already contains the lighting information of the room and the different intensities and distributions.
+ 
+ \item Reflections: Another way the panoramic image is used to enhance the realism of the composted scene is by generating accurate reflections of the real scene. The cubemap from a previous step is also used to fake reflections. A vector is cast from every vertex of the object along its normal and intersected with the cubemap generated from the panoramic image. The color is mixed with the albedo according to the specularity defined for the material to simulate reflection, this information is calculated in advance and used at runtime. This works well enough because we know beforehand that the scene is static, there will only be one non-animated object throughout the full execution.
+ 
+ \item Shadows: During early experiments it became clear that one of the bigger differences between real and virtual object were a product of the shadows as well as the light. There are two main problems when it comes to casting shadows for virtual objects in AR, one is the fact that there has to be an object underneath the 3D model to cast the shadow on, but this object has to be as unobtrusive as possible. If the goal is to achieve realism having the object appearing on a pedestal for the sake of casting shadows is counter productive. This issue is worked around by using a transparent material that receives shadows. The other main problem is that the shadows of real objects are deformed when cast on other objects, this problem is beyond the scope of this method, as it would require the program to have a notion of the geometry of the real space. 
  
 \end{enumerate}

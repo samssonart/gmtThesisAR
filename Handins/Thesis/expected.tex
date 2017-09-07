@@ -1,24 +1,32 @@
 %!TEX root = ../main.tex
 
-In this chapter the way in which the effectiveness of the method will be measured is explained, the measure of success and the scope of the method will be described. In terms of scope the aim of the method is to produce plausible lighting for Augmented Reality applications, and thus increase the sense of realism of the composed graphics. This does not mean that imagery that would for all practical purposes be indistinguishable from reality will be achieved. As said earlier, the incompatible lighting is only one of the problems with current AR graphics. In order to achieve complete realism all the other problems would have to be tackled as well, this includes occlusion from real objects as the most prominent one, but also the shadows of real objects not affecting the virtual ones at all. The method will also not attempt to improve other aspects of AR, such as tracking. The method comprises a pre-calculation and a real-time phase, pre-calculation being the acquisition of the 360 panorama and its analysis for calculation; real-time is the actual rendering. It is also desirable and expected that the pre-calculation phase can be completed within a reasonable time frame on a mobile device, in terms of usability this should be no more than 1 minute.\newline
+ In terms of scope the aim of the method is to produce plausible lighting for Augmented Reality applications, and thus increase the sense of realism of the composed graphics. This does not mean that imagery that would for all practical purposes be indistinguishable from reality will be achieved. As said earlier, the incompatible lighting is only one of the problems with current AR graphics. In order to achieve complete realism all the other problems would have to be tackled as well. The method also does not attempt to improve other aspects of AR, such as tracking. And so the experiment is designed only to evaluate the similarity of a real object and a virtual representation of the same object in the same controlled lighting conditions.\newline
 \section{Setup}
-In order to test the results a similar setup as the one shown in figures 2 and 3 will be used, showing real objects made out of different materials, so at least a matte, a shiny and a reflective object are present. The scene will be augmented with a virtual object with the possibility of changing the shader used for it. At least a Lambert diffuse, a Phong or Blinn and a specular shaders will be available. The setup will have known,  consistent and controllable lighting.\newline
-Besides augmenting the scene with the developed application images will be produced manually, replicating the real world lighting as close as possible. Screen captures of the plain real world scene, with no augmentation whatsoever; the manually augmented scene and the automatic results provided by the method will be left for the reader to see. Also criticizing and discussing how much the results obtained match the expected results and the ground truth. Another additional image will be taken using the commercial solution Vuforia as engine for augmentation, in order to compare the method to already existing solutions. What will be compared is the accuracy of the lighting compared to the real environment only. Other parameters such as pre-processing times and frames per second on the real-time phase will be captured and be left for the reader to compare, but no judgment will be made upon them when evaluating each method.\newline
-The actual way in which the experiment will be conducted is defined in the following scenario:
+In order to test the results a real object with a variety of materials was chosen, in this case it was an Xbox 360 controller with a custom paint job. A 3D model of the same Xbox 360 controller was modified to match the custom paint job and the materials were replicated as closely as posible to the real object using Unity's built-in shaders. In the end 4 main shaders were used, a highly reflective plastic for the borders and some of the buttons, a more matte plastic for the main body, a completely specular chrome for the Xbox button and a semi-transparent and glossy plastic for the colored buttons. The choice of this motif was based both on the ease to find a reliable 3D counterpart for a real object and on the already wide variety of materials present in the object.\newline
+In order to provide a ground truth for a reliable size by side comparison a screen capture of the application running while both the real and virtual object are in the frame, in similar positions and orientations and affected by controlled lighting that is also simulated using the method for the virtual counterpart.\newline
+The actual way in which the experiment is conducted is defined in the following scenario:
 \begin{itemize}
-    \item \textbf{Setting:} A room with consistent and invariable lighting will be used. A set of common objects will be laid on a table, the objects must include a matte, a shiny and a reflective object. At least one extra light source with known parameters.
+    \item \textbf{Setting:} A room with consistent and invariable lighting is used and some kind of flat surface to lay the objects on. An Xbox 360 controller with the characteristics described previously and a marker to track the virtual object.
     \item \textbf{Requirements:} A mobile device running the developed demo application, a marker for virtual objects. A real object and its corresponding virtual counterpart, modelled as close as possible. 
-    \item \textbf{Goals:} Obtaining a set of images that will enable readers and experimenters alike to make a fair comparison of the method application, a commercial solution and a real object.
+    \item \textbf{Goals:} Obtaining a set of images that will enable readers and experimenters alike to make a fair comparison of the method application, side by side with a real object counterpart.
     \item \textbf{Actions:} Place the real object on top of the marker and take a picture with the same device running the demo application. Then remove the object and take screen captures of the augmented scene using a commercial solution and subsequently the method demo application.
-     \item \textbf{Benchmark:} The image result yielded by each method, as well as the time for the pre-processing phase (where applicable) and the time per frame will be captured and used for comparison's sake and benchmarking.
+     \item \textbf{Benchmark:} The image result yielded by the method, as well as the  time per frame will be captured and used for comparison's sake and benchmarking.
 \end{itemize}
 
-\section{Expected Results}
-Since the final product is a graphic on a screen, an image, it's somewhat difficult to define a measure of success, due to the inherent subjective nature of image appreciation. It can be said that the method successfully converged if in the final image the synthetic objects are hard to tell from the real ones, if formed on a line on a still image. Hard to tell meaning that some scrutiny and reflection is necessary when looking at a screen capture of the application. If an average technology consumer is able to immediately tell which of the objects are synthetic and which are real the method will then have failed. To explain the measure better in Figure 2 we can see three objects, 2 real, 1 synthetic, from an AR included with the Vuforia library. Figure 3 shows the same array of objects, again the same 2 real and 1 synthetic, but in this case the synthetic object having been inserted with hand tuned lighting. The visual result is expected to be more accurate to the real world lighting conditions than the one obtained using Vuforia with default parameters.
+\section{Results}
+
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.6\textwidth]{Figures/fake.jpg}
-\caption{Default lighting, making the virtual object stand out}
-\includegraphics[width=0.6\textwidth]{Figures/realish.jpg}
-\caption{Adjusted lighting, giving a more believable look}
+\includegraphics[width=1.0\textwidth]{Figures/res1.JPG}
+\caption{Side by side comparison of the real and virtual object}
+\includegraphics[width=1.0\textwidth]{Figures/rest5.JPG}
+\caption{Side by side comparison of the real and virtual object on a different setting}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1.0\textwidth]{Figures/rest3.JPG}
+\caption{Just the real object}
+\includegraphics[width=1.0\textwidth]{Figures/rest4.JPG}
+\caption{Just the virtual object}
 \end{figure}
