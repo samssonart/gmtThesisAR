@@ -18,31 +18,31 @@ It's important to also mention the need of replicating the previous work's setti
 
 \section{Results}
 
-\underline{Experiment 1: Game controller: } This experiment produced quite satisfactory results, the materials and the position and orientation on the virtual object are not exactly the same, and so the highlights shining off the surface are not in the same places. But the shadow shows that the light is placed in a very acceptable approximation of the real light. The application is running at 24 FPS on this screen capture and it's a good measure of the average of performance. 
+Experiment 1: Game controller:  This experiment produced quite satisfactory results, the materials and the position and orientation on the virtual object are not exactly the same, and so the highlights shining off the surface are not in the same places. But the shadow shows that the light is placed in a very acceptable approximation of the real light. The application is running at 24 FPS on this screen capture and it's a good measure of the average of performance. 
 \begin{figure}[H]
     \centering
-    \begin{minipage}{0.5\textwidth}
+    \begin{minipage}{0.475\textwidth}
         \centering
         \includegraphics[width=0.99\textwidth]{Figures/ContReal.png} % first figure itself
-        \caption{Real object: Custom painted Xbox 360 controller}
+        \caption{Real custom painted Xbox 360 controller}
     \end{minipage}\hfill
-    \begin{minipage}{0.5\textwidth}
+    \begin{minipage}{0.475\textwidth}
         \centering
         \includegraphics[width=0.99\textwidth]{Figures/ContVirtual.png} % second figure itself
         \caption{Virtual counterpart of the same object}
     \end{minipage}
 \end{figure}
 
-\underline{Experiment 2: Karsch's scenario: } This scenario was hard to replicate, due to the unusual framing and placing of the objects. The image produced by this method is plenty different, and the method it's being compared with is not a runtime method, but even so there are conclusions that can be drawn. In the image produced by Karsch's application it's hard to say if the lighting in the real and virtual parts of the image really correspond, the light sources, except for one, are not present in the frame and there are no similar real objects to the virtual ones that would serve as ground truth. In this methods result there is enough evidence to prove that the lighting in both the real and virtual worlds is similar, with cues such as the presence of real objects and their shadow directions.\newline
+Experiment 2: Karsch's scenario:  This scenario was hard to replicate, due to the unusual framing and placing of the objects. The image produced by this method is plenty different, and the method it's being compared with is not a runtime method, but even so there are conclusions that can be drawn. In the image produced by Karsch's application it's hard to say if the lighting in the real and virtual parts of the image really correspond, the light sources, except for one, are not present in the frame and there are no similar real objects to the virtual ones that would serve as ground truth. In this methods result there is enough evidence to prove that the lighting in both the real and virtual worlds is similar, with cues such as the presence of real objects and their shadow directions.\newline
 In this methods application the framerate at 21 FPS is still quite acceptable considering that there are 6 virtual dense models, but given the fact that Karsch's method is not interactive there's no possibility to compare in this regard.
 \begin{figure}[H]
     \centering
-    \begin{minipage}{0.5\textwidth}
+    \begin{minipage}{0.475\textwidth}
         \centering
         \includegraphics[width=0.99\textwidth]{Figures/budaDragonKarsch.png} % first figure itself
         \caption{Karsch's method results}
     \end{minipage}\hfill
-    \begin{minipage}{0.5\textwidth}
+    \begin{minipage}{0.475\textwidth}
         \centering
         \includegraphics[width=0.99\textwidth]{Figures/budaDragon.png} % second figure itself
         \caption{This methods's results}
@@ -50,32 +50,36 @@ In this methods application the framerate at 21 FPS is still quite acceptable co
 \end{figure}
 
 
-\underline{Experiment 3: Kanbara and Pessoa's scenarios: } These two scenarios will be grouped together due to the fact that the steps to replicate the experiment are the same. They both presented ceramic material teapots with a lighting setting that they did not specify. 
+Experiment 3: Kanbara and Pessoa's scenarios:  These two scenarios will be grouped together due to the fact that the steps to replicate the experiment are the same. They both presented ceramic material teapots with a lighting setting that they did not specify. 
 \begin{figure}[H]
     \centering
-    \begin{minipage}{0.5\textwidth}
+    \begin{minipage}{0.475\textwidth}
         \centering
         \includegraphics[width=0.99\textwidth]{Figures/Pessoa.png} % first figure itself
         \caption{Pessoa's method results}
     \end{minipage}\hfill
-    \begin{minipage}{0.5\textwidth}
+    \begin{minipage}{0.475\textwidth}
         \centering
         \includegraphics[width=0.99\textwidth]{Figures/kanbara.png} % first figure itself
         \caption{Kanbara's method results}
     \end{minipage}\hfill
 \end{figure}
 
-Both results look well blended into the environment, however in Pessoa's case it also must be said that the lighting setting is not disclosed and is not obvious from just looking at the results. For the aforementioned method there's also a considerable amount of pre-production required for the method to actually work, and the performance has a rather bad scaling, ranging from 180 fps with no objects to 5 fps with seven objects. The method in this work doesn't have those problems, the only pre-step required is to take a spherical panoramic image with the same device and no technical knowledge necessary;  and performance scales better going from 24 fps with a single object to 21 with six.\newline
+Both results look well blended into the environment, however in Pessoa's case it also must be said that the lighting setting is not disclosed and is not obvious from just looking at the results. For the aforementioned method there's also a considerable amount of pre-production required for the method to actually work, and the performance has a rather bad scaling, ranging from 180 FPS with no objects to 5 FPS with seven objects. The method in this work doesn't have those problems, the only pre-step required is to take a spherical panoramic image with the same device and no technical knowledge necessary;  and performance scales better going from 24 FPS with a single object to 21 with six.\newline
 In the case of Kanbara's results they look really good, the downsides to their method that the one here resolves are the need for a physical 3D marker to probe lighting and the performance, they report 20 FPS on a computer for the experiment they published. It's admittedly a 10 year old computer at the time of this writing, but the method proposed here is achieving slightly better framerates on a mobile device.\newline
 
-\begin{figure}
-  \centering
-  \setlength{\unitlength}{\textwidth} 
-    \begin{picture}(1,0.5)
-       \put(-0.1,0){\includegraphics[width=0.99\unitlength]{Figures/kanbaraComp.png}}
-       
-    \end{picture}
-    \caption{This method's teapot result}
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.475\textwidth}
+        \centering
+        \includegraphics[width=0.99\textwidth]{Figures/pessoaComp.png} % first figure itself
+        \caption{Pessoa's comparison results}
+    \end{minipage}\hfill
+    \begin{minipage}{0.475\textwidth}
+        \centering
+        \includegraphics[width=0.99\textwidth]{Figures/KanbaraComp.png} % first figure itself
+        \caption{Kanbara's comparison results}
+    \end{minipage}\hfill
 \end{figure}
 
 \section{Gallery}
@@ -84,20 +88,20 @@ Here are a few more screen captures from the application that show the potential
 
 \begin{figure}[H]
     \centering
-    \begin{minipage}{0.5\textwidth}
+    \begin{minipage}{0.475\textwidth}
         \centering
         \includegraphics[width=0.99\textwidth]{Figures/ContBoth.png} % first figure itself
  
     \end{minipage}\hfill
-    \begin{minipage}{0.5\textwidth}
+    \begin{minipage}{0.475\textwidth}
         \centering
         \includegraphics[width=0.99\textwidth]{Figures/Lena1.png} % second figure itself
     \end{minipage}\hfill
-        \begin{minipage}{0.5\textwidth}
+        \begin{minipage}{0.475\textwidth}
         \centering
         \includegraphics[width=0.99\textwidth]{Figures/TeapotVirtual.png} % second figure itself
     \end{minipage}\hfill
-    \begin{minipage}{0.5\textwidth}
+    \begin{minipage}{0.475\textwidth}
         \centering
         \includegraphics[width=0.99\textwidth]{Figures/TeapotReal.png} % first figure itself
     \end{minipage}
