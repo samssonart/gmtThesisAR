@@ -15,10 +15,12 @@ The actual way in which the experiment is conducted is defined in the following 
 \end{itemize}
 
 It's important to also mention the need of replicating the previous work's settings and the reason why. In some cases the product is not a runtime application, and thus the only applicable comparison is image-based. The authors of other runtime methods were approached to evaluate the possibility of using their binaries to produce images and they either declined or gave no answer. And so the only possible comparison is image to image and taking their word for the performance indications in the form of frames per second.\newline
+All of the experiments were recorded on video by connecting the tablet device to a laptop, and are available to watch. The images shown here are select still images from said videos and the framerates discussed per experiment are averages from the on-screen counter seen on each video. It's also important to say that the recorded framerates are about 10\% lower than when the application is not being recorded.\newline.
 
 \section{Results}
 
-Experiment 1: Game controller:  This experiment produced quite satisfactory results, the materials and the position and orientation on the virtual object are not exactly the same, and so the highlights shining off the surface are not in the same places. But the shadow shows that the light is placed in a very acceptable approximation of the real light. The application is running at 24 FPS on this screen capture and it's a good measure of the average of performance. 
+Experiment 1: Real object substitution\newline  
+This experiment produced quite satisfactory results, the materials and the position and orientation on the virtual object are not exactly the same, and so the highlights shining off the surface are not in the same places. But the shadow shows that the light is placed in a very acceptable approximation of the real light. The application is running at 24 FPS on this screen capture and it's a good measure of the average of performance. 
 \begin{figure}[H]
     \centering
     \begin{minipage}{0.475\textwidth}
@@ -33,8 +35,9 @@ Experiment 1: Game controller:  This experiment produced quite satisfactory resu
     \end{minipage}
 \end{figure}
 
-Experiment 2: Karsch's scenario:  This scenario was hard to replicate, due to the unusual framing and placing of the objects. The image produced by this method is plenty different, and the method it's being compared with is not a runtime method, but even so there are conclusions that can be drawn. In the image produced by Karsch's application it's hard to say if the lighting in the real and virtual parts of the image really correspond, the light sources, except for one, are not present in the frame and there are no similar real objects to the virtual ones that would serve as ground truth. In this methods result there is enough evidence to prove that the lighting in both the real and virtual worlds is similar, with cues such as the presence of real objects and their shadow directions.\newline
-In this methods application the framerate at 21 FPS is still quite acceptable considering that there are 6 virtual dense models, but given the fact that Karsch's method is not interactive there's no possibility to compare in this regard.
+Experiment 2: Karsch's scenario  \newline
+This scenario was hard to replicate, due to the unusual framing and placing of the objects. The image produced by this method is plenty different, and the method it's being compared with is not a runtime method, but even so there are conclusions that can be drawn. In the image produced by Karsch's application it's hard to say if the lighting in the real and virtual parts of the image really correspond, the light sources, except for one, are not present in the frame and there are no similar real objects to the virtual ones that would serve as ground truth. In this methods result there is enough evidence to prove that the lighting in both the real and virtual worlds is similar, with cues such as the presence of real objects and their shadow directions.\newline
+In this methods application the framerate at 15 FPS is still quite acceptable considering that there are 6 virtual dense models, but given the fact that Karsch's method is not interactive there's no possibility to compare in this regard.
 \begin{figure}[H]
     \centering
     \begin{minipage}{0.475\textwidth}
@@ -50,7 +53,8 @@ In this methods application the framerate at 21 FPS is still quite acceptable co
 \end{figure}
 
 
-Experiment 3: Kanbara and Pessoa's scenarios:  These two scenarios will be grouped together due to the fact that the steps to replicate the experiment are the same. They both presented ceramic material teapots with a lighting setting that they did not specify. 
+Experiment 3: Kanbara and Pessoa's scenarios\newline  
+These two scenarios will be grouped together due to the fact that the steps to replicate the experiment are the same. They both presented ceramic material teapots with a lighting setting that they did not specify. 
 \begin{figure}[H]
     \centering
     \begin{minipage}{0.475\textwidth}
@@ -65,8 +69,8 @@ Experiment 3: Kanbara and Pessoa's scenarios:  These two scenarios will be group
     \end{minipage}\hfill
 \end{figure}
 
-Both results look well blended into the environment, however in Pessoa's case it also must be said that the lighting setting is not disclosed and is not obvious from just looking at the results. For the aforementioned method there's also a considerable amount of pre-production required for the method to actually work, and the performance has a rather bad scaling, ranging from 180 FPS with no objects to 5 FPS with seven objects. The method in this work doesn't have those problems, the only pre-step required is to take a spherical panoramic image with the same device and no technical knowledge necessary;  and performance scales better going from 24 FPS with a single object to 21 with six.\newline
-In the case of Kanbara's results they look really good, the downsides to their method that the one here resolves are the need for a physical 3D marker to probe lighting and the performance, they report 20 FPS on a computer for the experiment they published. It's admittedly a 10 year old computer at the time of this writing, but the method proposed here is achieving slightly better framerates on a mobile device.\newline
+Both results look well blended into the environment, however in Pessoa's case it also must be said that the lighting setting is not disclosed and is not obvious from just looking at the results. For the aforementioned method there's also a considerable amount of pre-production required for the method to actually work, and the performance has a rather bad scaling, ranging from 180 FPS with no objects to 5 FPS with seven objects. The method in this work doesn't have those problems, the only pre-step required is to take a spherical panoramic image with the same device and no technical knowledge necessary;  and performance scales better going from 24 FPS with a single object to 15 with six of them.\newline
+In the case of Kanbara's results they look really good, the downsides to their method that the one here resolves are the need for a physical 3D marker to probe lighting and the performance, they report 20 FPS on a computer for the experiment they published. It's admittedly a more than 10 year old computer at the time of this writing, but the method proposed here is achieving slightly better framerates on a mobile device.\newline
 
 \begin{figure}[H]
     \centering
