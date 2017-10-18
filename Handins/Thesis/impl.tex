@@ -1,6 +1,6 @@
 %!TEX root = ../main.tex
 
-In this chapter, the specifics of the implementation made for the demo application are discussed. In general it's a direct translation of the theoretical method proposed there were a few adaptations needed because of the way light is modelled in raster graphics.
+In this chapter,  we discuss the specifics of the implementation made for the demo application. In general it's a direct translation of the theoretical method proposed, there were a few adaptations needed because of the way light is modelled in raster graphics.
 
 \section{Technologies}
 The idea of the method is that after the experiments and the eventual would-be finished product can be used within a mobile device with no help from computers. To that end, the implementation uses different technologies. For the capturing of spherical panoramic images the Google Street View app is used, it's available for both iOS and Android and it's a ready-made solution to use panoramic images as a tool for the experiments. The base of the implementation is done in Unity, but a native code library is used within Unity. Said native code library is written in C++ and uses OpenCV for all the image processing tasks. OpenCV is also available as a library for Unity, but it's a paid library, it doesn't have all the functionality that its C++ counterpart has and offloading the heavy image processing parts of the method to native code results in faster execution.\newline
