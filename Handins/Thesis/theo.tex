@@ -1,26 +1,34 @@
 %!TEX root = ../main.tex
 
-In this chapter we will introduce a few technical concepts in order to make the proposed method and what it aims to accomplish more clear.
+In this chapter we will introduce a few technical concepts in order to make our proposed method and what we aim to accomplish more clear.
 
 \section{Augmented Reality}
-Augmented Reality is defined as a software system that features a blend of real and virtual objects, the user can interact with it in real time and presents a 2D representation of a 3D world for both the real and virtual sides. This is the most accepted definition originally presented by \cite{azuma1997}. \newline
-In order to combine real and virtual objects both worlds must be aligned, in the sense that they must share a common origin for both position and rotation, in a way that they can coexist in a realistic way within the same image. If the virtual objects present in the real scene are not aligned the feasibility of the whole composition is compromised. The tracking of real world features as a guideline for alignment in the virtual world is one of the challenges in the field of AR. There are many techniques that have been used, such as sensor-based tracking, that uses dedicated hardware to feed the software application the position and rotation information it needs; vision-based tracking, in which the position and orientation origin of the virtual world are determined by images recognized by a computer vision algorithm. These images are named \emph{fiducial markers} and can be artificial black and white image that form patterns; more "natural" images featuring points, lines, shapes and/or textures; or even 3D objects can also serve as fiducial markers. Other approaches involving both sensors and vision algorithms have also been used. 
-While our method does not aim at the technical challenge of tracking other than existing means, it is important to explain the concept in order to make the narrative clear. The presented information about tracking was gathered from \cite{zhou2008}
+Augmented Reality is defined as a software system that features a blend of real and virtual objects; the user can interact with it in real time and displays a 2D representation of a 3D world for both the real and virtual sides. This is the most accepted definition originally presented by \citep{azuma1997}. \newline
+In order to combine real and virtual objects both worlds must be aligned, in the sense that they must share a common origin for both position and rotation, so that they can coexist in a realistic way within the same image. If the virtual objects present in the real scene are not aligned, the consistency of the whole composition is compromised. \newline
+The tracking of real world features as a guideline for alignment in the virtual world is one of the challenges in the field of AR. \citep{zhou2008} extensibly researched the state-of-the-art technologies used for tracking. Many techniques have been used, such as sensor-based tracking, that uses dedicated hardware to feed the software application the position and rotation information it needs. Our method uses vision-based tracking, in which the position and orientation origin of the virtual world are determined by images recognized using a computer vision algorithm. These images are named \emph{fiducial markers} and  there are different kinds of them:
+\begin{itemize}
+  \item \textbf{Binary markers}: Artificial black and white images that form patterns. Any combination of at least $8\times8$ black and white pixels that don't form a repeating pattern can work as a binary marker.
+  \item \textbf{Natural image markers}: The vision algorithm extracts features as points, lines, shapes and/or textures in any image that has identifiable elements. This means that the image must have contrasting details spread across the whole image and not form repeating patterns.
+  \item \textbf{3D markers}:A small object is analyzed and a point cloud is extracted. During the tracking phase, point clouds are generated from the camera input and matched to the reference cloud. The main advantage is that the viewing angle becomes irrelevant to recognize the marker.
+  \item \textbf{Mixed}:Other approaches involving both sensors and vision algorithms have also been used. 
+\end{itemize}
+
+While our method does not aim to alleviate the technical challenge of tracking other than existing means, it is necessary to explain the concept for clarity. 
 
 \section{Sensors}
 State-of-the-art smartphones and tablets in the market have built-in sensors to perform different kinds of measurements that are helpful for application developers, such as motion, orientation and other environmental conditions. The ones that are relevant for this method are the following:\newline
-\textbf{Accelerometer}: Measures proper acceleration relative to gravity. Its application in mobile development is to measure motion changes and to the device orientation relative to the Earth's surface. It usually consists of 3 orthogonal axes, and therefore can measure acceleration on one, two or three axes. The output is given in m/s\textsuperscript{2}. \newline
+\textbf{Accelerometer}: Measures proper acceleration relative to gravity. Its application in mobile development is to measure motion changes and to the device orientation relative to the surface of the Earth. It usually consists of 3 orthogonal axes, and therefore can measure acceleration on one, two or three axes. The output is given in m/s\textsuperscript{2}. \newline
 \textbf{Gyroscope}: A sensor that is capable of measuring the rate of rotation around a particular axis. It serves the same purpose as the accelerometer, but mobile devices usually have both for more robust measurements. The output is given in rad/s. In our method these will be used to acquire the $360^{\circ}$  panoramic photograph, making sure that the device is within the same pitch while capturing all the images that will be stitched together to make the panorama. \newline
-\textbf{Magnetometer}: It serves the purpose of a compass by measurering the device's orientation with respect to the Earth's magnetic poles. In mobile development it is useful to get the heading of the device expressed in degrees from the north in a clockwise direction.\newline
-\textbf{GPS}: Measures the raw position of the device in three-dimensional Cartesian coordinates where the origin is the center of the Earth. It is used to determined where on planet Earth the device is located (Country, city, neighborhood, etc.). It needs to have an uninterrupted line of sight, with no electromagnetic interference, with at least 4 out of the 24 satellites in orbit that are used for GPS.
+\textbf{Magnetometer}: It serves the purpose of a compass by measuring the orientation of the device with respect to the Earth magnetic poles. For application development, it is useful to get the heading of the device with respect to the geographic north in a clockwise direction. This heading is an angle expressed in degrees.\newline
+\textbf{GPS}: Measures the raw position of the device in three-dimensional Cartesian coordinates where the origin is the center of the Earth. It is used to determined where on Earth the device is located (Country, city, neighborhood, etc.). It needs to have an uninterrupted line of sight, with no electromagnetic interference, to at least 4 out of the 24 satellites in orbit that are used for GPS.
 
 \section{Standard Illuminant}
-In order to describe the color of a light source, it is important to have detailed knowledge of the type of illuminant used. The International Commission on Illumination (CIE)  have defined a number of spectral power distributions, referred to as CIE standard illuminants, to provide reference spectra for colorimetric issues. The illuminants are denoted by a letter or a letter-number combination. Their spectral power distributions (SPD) are normalized to a value of 100 at a wavelength of 560 nm in following figures. Illuminants series A through D exist, all of them specializing on a different kind of light source. For our method the relevant one is series D, because it describes a type of average light source, typically associated to daylight global illumination.\newline
-D65 corresponds roughly to the average midday light in western and norther Europe (comprising both direct sunlight and the light diffused by a clear sky). Because of that, it is also called a \emph{daylight illuminant}. It has a correlated colour temperature of approximately $6500 K$. As any standard illuminant is represented as a table of averaged spectrophotometric data, any light source which statistically has the same relative spectral power distribution (SPD) can be considered a D65 light source. It is important to note that D65 is purely theoretical, there are no actual artificial D65 light sources. The D65 is the white point that we used to convert chromatic information into luminance for the light source detection.
+In order to describe the color of a light source, it is important to have detailed knowledge of the type of illuminant used. The International Comission on Illumination (CIE) defined a number of spectral power distributions, referred to as CIE standard illuminants, to provide reference spectra for colorimetric issues. The illuminants are denoted by a letter or a letter-number combination. Their spectral power distributions (SPD) are normalized to a value of 100 at a wavelength of 560 nm. Illuminants series A through D exist, all of them specializing on a different kind of light source. For our method, the relevant one is series D, it describes a type of average light source, typically associated to daylight global illumination.\newline
+D65 corresponds roughly to the average midday light in western and norther Europe, comprising both direct sunlight and the light diffused by a clear sky in indoors situations. Because of that, it is also called a \emph{daylight illuminant}. It has a correlated color temperature of approximately $6500 K$. As any standard illuminant is represented as a table of averaged spectrophotometric data, any light source which statistically has the same relative spectral power distribution (SPD) can be considered a D65 light source. It is important to note that D65 is purely theoretical, there are no actual artificial D65 light sources. The D65 is the white point that we used to convert chromatic information into luminance for the light source detection, as we will detail further in the methodology section.
 
 \section{Panoramic photography}
-Panoramic photography is a technique of photography, using specialized equipment or software, that captures images with horizontally, and sometimes also vertically, elongated fields of view. While there is no formal definition of the minimum field of view required for a photograph to be considered panoramic, in this work we focus on complete horizontal $360^{\circ}$ captures.\newline
-There are different kinds of panoramic images, the most intuitive is the one called wide-format photograph. It basically consists of a series of photos taken from the same height and later stitched together to appear as a single wide image. The image can be then projected on to a cylinder. This kind of panoramic photograph captures $360^{\circ}$ of horizontal field of view, while the vertical field of view is dependant entirely on the lens used to capture the individual photographs. Figure 3.1 shows an example of a cylindrical panoramic image. 
+Panoramic photography is a technique for capturing images with horizontally, and sometimes also vertically, elongated fields of view. While there is no formal definition of the minimum field of view required for a photograph to be considered panoramic, in this work we focus on complete horizontal $360^{\circ}$ captures.\newline
+There are different types of panoramic images. The one called wide-format photograph consists of a series of photos taken from the same height, that are then stitched together to appear as a single wide image. The image can subsequently be projected on to a cylinder. This kind of panoramic photograph captures $360^{\circ}$ of the horizontal field of view, while the vertical field of view is dependant entirely on the lens used to capture the individual photographs. Figure 3.1 shows an example of a cylindrical panoramic image. 
 
 \begin{figure}[H]
   \centering
@@ -29,27 +37,23 @@ There are different kinds of panoramic images, the most intuitive is the one cal
        \put(-0.1,0){\includegraphics[width=1.3\unitlength]{Figures/pano6.jpg}}
        
     \end{picture}
-    \caption{A cylindrical panorama of Trafalgar Square}
+    \caption{A cylindrical panorama of Trafalgar Square.}
 \end{figure}
 
-The type of panoramic image used in our method is called equirectangular panoramic image, or spherical panoramic image, due to the fact that the resulting image can be projected on to a sphere. The projection maps meridians to vertical straight lines of constant spacing, and circles of latitude to horizontal straight lines of constant spacing. This kind of projection introduces the types of distortion often seen in spherical projections, such as Mercator, where the poles of the sphere appear bigger than they really are. The process used by Google to create equirectangular panoramic images on mobile devices involves taking several pictures of the environment and, using the device's sensors, project them onto a sphere in their position relative to Earth's north. \newline
-Once all pictures are captured they are stitched together in a similar manner as for cylindrical mapping. For each individual image features are identified, those same features are searched on neighboring images and aligned so that they overlap. The area of overlap is then blended, resulting in a seamless, yet distorted representation of all the images as one. After this, the projection is applied as follows: \newline
-
+The type of panoramic image used in our method is called equirectangular panoramic image, or spherical panoramic image, due to the fact that the resulting image can be projected on to a sphere. The projection maps meridians to vertical straight lines of constant spacing, and circles of latitude to horizontal straight lines of constant spacing. This kind of projection introduces the types of distortion often seen in spherical projections, such as Mercator, where the poles of the sphere appear bigger than they really are. The process used by Google in the Street View application to create equirectangular panoramic images on mobile devices involves taking $44$ pictures of the environment and, using the device's sensors, project them onto a sphere in their position relative to the geographic north. \newline
+Image features are identified for each individual image, and then those features are identified on neighboring images and aligned so that they overlap. The area of overlap is then blended, resulting in a seamless, yet distorted representation of all the images as one. The projection is then applied as follows: \newline
 \begin{equation}
-    \lambda = \frac{x}{cos(\phi_l )} + \lambda_0
+    \theta = \frac{x}{cos(\phi_l )} + \theta_0
 \end{equation}
 
 \begin{equation}
     \phi = y + \phi_l
 \end{equation}
-
 Where: \newline
-$\lambda$ is the longitude of the location to project. \newline
-$\phi$ is the latitude of the location to project. \newline
-$\phi_l$ are the standard parallels (north and south of the equator) where the scale of the projection is true. \newline
-$\lambda_0$ is the central meridian of the map. \newline
-$x$ is the horizontal coordinate of the projected location on the map. \newline
-$y$ is the vertical coordinate of the projected location on the map. \newline
+$\theta$ and $\phi$ are the longitude and latitude of the location to project, respectively. \newline
+$\phi_l$ are the standard parallels (tropics) where image distortion is zero. \newline
+$\theta_0$ is the central meridian of the map. \newline
+$x$ and $y$ are the horizontal and vertical coordinates of the projected location on the map, respectively. \newline
 
 The kind of expected result can be seen on figure 3.2
 \begin{figure}[H]
@@ -59,5 +63,10 @@ The kind of expected result can be seen on figure 3.2
        \put(-0.1,0){\includegraphics[width=1.0\unitlength]{Figures/equirectangular.jpg}}
        
     \end{picture}
-    \caption{An average indoors equirectangular panorama}
+    \caption{An example of an indoors equirectangular panorama.}
 \end{figure}
+
+\section{Environment mapping}
+Environment mapping is an image-based technique to approximate the appearance of the overall light conditions of an environment. This is accomplished by means of a precomputed texture image mapped on a geometric surface as a far-away environment surrounding. This technique was originally proposed by \citep{Blinn76} using spheres. Nowadays there are other alternatives, such as cube, paraboloid, pyramid or cylinder maps. The principle for each surface is the same, but the way to map a planar image onto the surface varies per surface.\newline
+In order to generate an environment map it is necessary that the panorama is made into a High Dynamic Range image. This is because a Low Dynamic Range image fails to capture the information necessary to simulate correct color balance, shadows, and highlights of the lighting environment; ultimately producing both inaccurate and less visually pleasing results. This has been illustrated by \citep{DebevecRSO}.\newline 
+A relatively easy and effective way to make an image into an HDR version is a technique called Tone Mapping, in which versions with different exposure values of the same image are blended together to include the full range of highlights and shadows of the overexposed and underexposed versions in a single image. It's important to disclaim that the Tone Mapping process does not yield an actual HDR image, but a standard 24 bit image in the $0...255$ range, with highlight and shadow valued clipped. Nevertheless, the advantage of this process is that the environment will be described in a richer way, capturing the bright areas and the shadows better than the standard exposure image.
