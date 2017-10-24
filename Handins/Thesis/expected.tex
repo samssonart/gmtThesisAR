@@ -14,12 +14,12 @@ The actual way in which the experiment is conducted is defined in the following 
      \item \textbf{Benchmark:} We capture the image result yielded by our method, as well as the time per frame and use them for comparison's sake and benchmarking, head to head with the results from similar methods.
 \end{itemize}
 
-It's important to also mention the need of replicating the previous work's settings and the reason why. In some cases the product is not a runtime application, and thus the only applicable comparison is image-based. The authors of other runtime methods were approached to evaluate the possibility of using their binaries to produce images and they either declined or gave no answer. And so the only possible comparison is image to image and taking their word for the performance indications in the form of frames per second.\newline
+It is important to also mention the need of replicating the settings of previous works. In some cases, the product is not a runtime application, and thus the only applicable comparison is image-based. We contacted the authors of other runtime methods to ask the possibility of using their binaries to produce images and they either declined or gave no answer. And so the only possible comparison is image to image and taking their word for the performance indications in the form of frames per second.\newline
 All of the experiments were recorded on video by connecting the tablet device to a laptop, and are available to watch. The images shown here are select still images from said videos and the framerates discussed per experiment are averages from the on-screen counter seen on each video. It's also important to say that the recorded framerates are about 10\% lower than when the application is not being recorded.\newline
 
 \section{Experiment 1: Real object substitution}
 
-This experiment produced satisfactory results, the materials and the position and orientation on the virtual object are not exactly the same, and so the highlights shining off the surface are not in the same relative places. But the shadow shows that the light is placed in an acceptable approximation of the real light position. The application is running at 24 FPS on this screen capture and it's a good measure of the average of performance. 
+This experiment produced satisfactory results, the materials and the position and orientation on the virtual object are not exactly the same, and so the highlights shining off the surface are not in the same relative places. But the shadow shows that the light is placed in an acceptable approximation of the real light position. The application is running at 24 FPS on this screen capture and it's a good measure of the average performance time. 
 \begin{figure}[H]
     \centering
     \begin{minipage}{0.475\textwidth}
@@ -47,7 +47,7 @@ The framerate of our application for this experiment is 15 FPS on average. It is
     \begin{minipage}{0.475\textwidth}
         \centering
         \includegraphics[width=0.99\textwidth]{Figures/budaDragon.png} % second figure itself
-        \caption{This methods's results}
+        \caption{Our results}
     \end{minipage}
 \end{figure}
 
@@ -67,8 +67,8 @@ These two scenarios will be grouped together due to the fact that the steps to r
     \end{minipage}\hfill
 \end{figure}
 
-Both results look well blended into the environment, however in Pessoa's case it also must be said that the lighting setting is not disclosed and is not obvious from just looking at the results. For the aforementioned method there's also a considerable amount of pre-production required for the method to actually work, and the performance has a rather bad scaling, ranging from 180 FPS with no objects to 5 FPS with seven objects. Our method doesn't have those problems, and performance scales better going from 24 FPS with a single object to 15 with six of them.\newline
-In the case of Kanbara's results, they scene looks good, but the downsides to their method that ours resolves are the need for a physical 3D marker to probe lighting and the performance, they report 20 FPS on a computer for the experiment they published. It's admittedly a more than 10 year old computer at the time of this writing, but our method is achieving slightly better framerates on a mobile device.\newline
+Both results look well blended into the environment. However, in Pessoa's case it also must be said that the lighting setting is not disclosed and is not obvious from just looking at the results. For the aforementioned method there's also a considerable amount of pre-production required for the method to actually work, and the performance has a rather bad scaling, ranging from 180 FPS with no objects to 5 FPS with seven objects. Our method doesn't have those problems, and performance scales better going from 24 FPS with a single object to 15 with six of them.\newline
+In the case of Kanbara's results, their scene looks well composed. The downsides to their method that ours resolves are the need for a physical 3D marker to probe lighting and the performance. They report 20 FPS on a computer for the experiment they published. Our method is achieving slightly better framerates on a mobile device.\newline
 \begin{figure}[H]
     \centering
     \begin{minipage}{0.475\textwidth}
@@ -84,7 +84,7 @@ In the case of Kanbara's results, they scene looks good, but the downsides to th
 \end{figure}
 
 \section{Gallery}
-Here are a few more screen captures from the application that show the potential of the method for the reader to draw their own conclusions.
+In the following are a few more screen captures from the application that show the potential of the method for the reader to draw their own conclusions.
 \begin{figure}[H]
     \centering
     \begin{minipage}{0.38\textwidth}

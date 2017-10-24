@@ -1,5 +1,6 @@
 \documentclass{report}
 \usepackage[utf8]{inputenc}
+\usepackage[11pt]{moresize}
 \usepackage{natbib}
 \usepackage{graphicx}
 \usepackage{float}
@@ -11,31 +12,30 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 
+
 \citestyle{acmauthoryear}
 \setcitestyle{square} 
 
 \title{Realtime Environment Lighting Simulation for Augmented Reality Applications}
-\author{Marco Antonio Salcedo Sanson%
-}
-\affil{Utrecht University, Faculty of Science, Game and Media Technology Master's Program}
+\author{Marco Antonio Salcedo Sanson \\ Supervisor: Amir Vaxman}
+\affil{Game and Media Technology Master Program \\
+Department of Information and Computing Sciences \\
+Utrecht University \\}
 
-\author{Supervised by Amir Vaxman%
-}
-\affil{Department of Information and Computing Sciences, Utrecht University}
-
-\date{Dated: \today}
+\date{\today}
 
 % Definition of \maketitle
 \makeatletter         
 \def\@maketitle{
 \noindent
 \begin{center}
-{\huge \bfseries \sffamily \@title }\\[4ex] 
-{\Large  \@author}\\[4ex] 
+{\HUGE \bfseries \sffamily \@title }\\[8ex] 
+{\LARGE  \@author}\\[4ex] 
 \@date\\[8ex]
 \end{center}}
 \makeatother
 
+\def\NoNumber#1{{\def\alglinenumber##1{}\State #1}\addtocounter{ALG@line}{-1}}
 
 \begin{document}
 \begin{figure}[t]
